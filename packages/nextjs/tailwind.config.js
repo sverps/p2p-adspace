@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}", "./utils/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+    "./utils/**/*.{js,ts,jsx,tsx}",
+    "./p2p-addspace/**/*.{js,ts,jsx,tsx}",
+  ],
   plugins: [require("daisyui")],
   darkTheme: "scaffoldEthDark",
   // DaisyUI theme colors
@@ -17,8 +22,8 @@ module.exports = {
           neutral: "#212638",
           "neutral-content": "#ffffff",
           "base-100": "#ffffff",
-          "base-200": "#F9FBFF",
-          "base-300": "#DAE8FF",
+          "base-200": "#DAE8FF",
+          "base-300": "#c3d7fa",
           "base-content": "#212638",
           info: "#93BBFB",
           success: "#34EEB6",
@@ -43,8 +48,8 @@ module.exports = {
           neutral: "#F9FBFF",
           "neutral-content": "#385183",
           "base-100": "#385183",
-          "base-200": "#2A3655",
-          "base-300": "#212638",
+          "base-200": "#2a3b5c",
+          "base-300": "#2a2f42",
           "base-content": "#F9FBFF",
           info: "#385183",
           success: "#34EEB6",
