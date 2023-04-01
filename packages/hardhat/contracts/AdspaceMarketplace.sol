@@ -65,10 +65,9 @@ contract AdspaceMarketplace {
         string memory _dimensions, 
         string memory _restrictions
     ) public {
-        adspaceIndex++;
-
         Adspace memory newAdspace = Adspace(msg.sender, _websiteUrl, _dimensions, _restrictions, 0);
         adspaces[adspaceIndex] = newAdspace;
+        adspaceIndex++;
     }
 
     // Bid on an Adspace
