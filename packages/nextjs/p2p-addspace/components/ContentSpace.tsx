@@ -19,9 +19,9 @@ export const ContentSpace = ({ data }: ContentSpaceProps) => {
             <div className="flex-1">
               <div className="font-bold">{data.url}</div>
             </div>
-            <div>
+            {/* <div>
               <div>{`Active: ${data.costPerClick}`}</div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
