@@ -7,9 +7,10 @@ type ContentSpaceProps = {
     url: string;
     costPerClick: number;
   };
+  onInitiateBid: () => void;
 };
 
-export const ContentSpace = ({ data }: ContentSpaceProps) => {
+export const ContentSpace = ({ data, onInitiateBid }: ContentSpaceProps) => {
   return (
     <div className="flex flex-col gap-4 px-2 py-8 first:pt-0 last:pb-0">
       <div className="flex gap-4">
@@ -26,9 +27,8 @@ export const ContentSpace = ({ data }: ContentSpaceProps) => {
         </div>
       </div>
       <Actions>
-        <button className="btn btn-secondary btn-sm">Sign tx</button>
-        <button className="btn btn-secondary btn-sm" disabled={true}>
-          Send tx
+        <button className="btn btn-secondary btn-sm" onClick={onInitiateBid}>
+          Place bid
         </button>
       </Actions>
     </div>
