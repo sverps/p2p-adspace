@@ -28,10 +28,9 @@ export const useAdspaces = () => {
       if (!contract) {
         return;
       }
-      console.log({ contract });
 
       const adspaceIndex = await contract.adspaceIndex();
-      console.log({ adspaceIndex });
+
       if (!adspaceIndex) {
         return;
       }
@@ -41,7 +40,6 @@ export const useAdspaces = () => {
           contract.getAdspaceFromIndex(BigNumber.from(index)),
         ),
       );
-      console.log({ result });
 
       setAdspaces(
         result.map(adsp => {

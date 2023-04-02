@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { BigNumber, ethers } from "ethers";
 import { CommonInputProps, InputBase, IntegerVariant, isValidInteger } from "~~/components/scaffold-eth";
 
-type IntegerInputProps = CommonInputProps<string | BigNumber> & {
+type IntegerInputProps = CommonInputProps<string | BigNumber | undefined> & {
   variant?: IntegerVariant;
 };
 
@@ -22,7 +22,7 @@ export const IntegerInput = ({
   }, [onChange, value]);
 
   useEffect(() => {
-    if (isValidInteger(variant, value, false)) {
+    if (isValidInteger(variant, value ?? "", false)) {
       setInputError(false);
     } else {
       setInputError(true);
@@ -32,7 +32,7 @@ export const IntegerInput = ({
   return (
     <InputBase
       name={name}
-      value={value}
+      value={value ?? ""}
       placeholder={placeholder}
       error={inputError}
       onChange={onChange}

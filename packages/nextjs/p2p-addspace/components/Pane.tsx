@@ -10,7 +10,7 @@ export const Pane = ({
   children: ReactNode | ReactNode[];
 }) => {
   return (
-    <div className={`flex flex-col items-start`}>
+    <div className={`flex flex-col items-start w-full`}>
       {title && (
         <div className="h-[5rem] px-5 bg-base-300 rounded-[22px] top-0 left-0 py-[0.65rem] shadow-lg shadow-base-300">
           <p className="my-0 text-sm">{title}</p>
