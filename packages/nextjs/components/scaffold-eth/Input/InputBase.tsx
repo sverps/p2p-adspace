@@ -1,14 +1,13 @@
-import { ChangeEvent, ReactNode, useCallback } from "react";
+import { ChangeEvent, InputHTMLAttributes, ReactNode, useCallback } from "react";
 import { CommonInputProps } from "~~/components/scaffold-eth";
 
 type InputBaseProps<T> = CommonInputProps<T> & {
   error?: boolean;
-  disabled?: boolean;
   prefix?: ReactNode;
   suffix?: ReactNode;
-};
+} & Omit<InputHTMLAttributes<HTMLInputElement>, keyof CommonInputProps<T> | "prefix">;
 
-export const InputBase = <T extends { toString: () => string } | undefined = string | undefined>({
+export const InputBase = <T extends { toString: () => string } = string>({
   name,
   value,
   onChange,
@@ -17,6 +16,7 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
   disabled,
   prefix,
   suffix,
+  ...rest
 }: InputBaseProps<T>) => {
   let modifier = "";
   if (error) {
@@ -41,8 +41,8 @@ export const InputBase = <T extends { toString: () => string } | undefined = str
         name={name}
         value={value?.toString() ?? ""}
         onChange={handleChange}
-        disabled={disabled}
         autoComplete="off"
+        {...rest}
       />
       {suffix}
     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import contracts from "../../generated/hardhat_contracts";
 import { Dimensions } from "../components/DimensionsInfo";
 import { BigNumber } from "ethers";
@@ -23,34 +23,36 @@ export const useAdspaces = () => {
   });
   const [adspaces, setAdspaces] = useState<Adspace[]>();
 
-  useEffect(() => {
-    (async function getAdspaces() {
-      if (!contract) {
-        return;
-      }
+  const getAdspaces = useCallback(async () => {
+    if (!contract) {
+      return;
+    }
 
-      const adspaceIndex = await contract.adspaceIndex();
+    const adspaceIndex = await contract.adspaceIndex();
 
-      if (!adspaceIndex) {
-        return;
-      }
+    if (!adspaceIndex) {
+      return;
+    }
 
-      const result = await Promise.all(
-        Array.from({ length: adspaceIndex.toNumber() }).map((_, index) =>
-          contract.getAdspaceFromIndex(BigNumber.from(index)),
-        ),
-      );
+    const result = await Promise.all(
+      Array.from({ length: adspaceIndex.toNumber() }).map((_, index) =>
+        contract.getAdspaceFromIndex(BigNumber.from(index)),
+      ),
+    );
 
-      setAdspaces(
-        result.map(adsp => {
-          const dimensionsArray = adsp.dimensions.split(":").map(v => parseInt(v));
-          return { ...adsp, dimensions: { x: dimensionsArray[0], y: dimensionsArray[1] } };
-        }),
-      );
-    })();
+    setAdspaces(
+      result.map(adsp => {
+        const dimensionsArray = adsp.dimensions.split(":").map(v => parseInt(v));
+        return { ...adsp, dimensions: { x: dimensionsArray[0], y: dimensionsArray[1] } };
+      }),
+    );
   }, [contract]);
 
-  return { data: adspaces, loading: !adspaces } as
-    | { data: undefined; loading: true }
-    | { data: Adspace[]; loading: false };
+  useEffect(() => {
+    getAdspaces();
+  }, [getAdspaces]);
+
+  return { data: adspaces, loading: !adspaces, refetch: getAdspaces } as
+    | { data: undefined; loading: true; refetch: () => void }
+    | { data: Adspace[]; loading: false; refetch: () => void };
 };

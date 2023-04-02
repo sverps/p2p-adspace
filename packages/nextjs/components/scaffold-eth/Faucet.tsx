@@ -98,9 +98,13 @@ export const Faucet = () => {
               <AddressInput
                 placeholder="Destination Address"
                 value={inputAddress}
-                onChange={value => setInputAddress(value)}
+                onChange={value => setInputAddress(value as string)}
               />
-              <EtherInput placeholder="Amount to send" value={sendValue} onChange={value => setSendValue(value)} />
+              <EtherInput
+                placeholder="Amount to send"
+                value={sendValue}
+                onChange={value => setSendValue(value as string)}
+              />
               <button
                 className={`h-10 btn btn-primary btn-sm px-2 rounded-full space-x-3 ${
                   loading ? "loading before:!w-4 before:!h-4 before:!mx-0" : ""

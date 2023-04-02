@@ -21,14 +21,14 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
   const [enteredEnsName, setEnteredEnsName] = useState<string>();
   const { data: ensName, isLoading: isEnsNameLoading } = useEnsName({
     address: value,
-    enabled: isAddress(value),
+    enabled: value ? isAddress(value) : false,
     chainId: 1,
     cacheTime: 30_000,
   });
 
   const { data: ensAvatar } = useEnsAvatar({
     address: value,
-    enabled: isAddress(value),
+    enabled: value ? isAddress(value) : false,
     chainId: 1,
     cacheTime: 30_000,
   });
@@ -43,7 +43,7 @@ export const AddressInput = ({ value, name, placeholder, onChange }: CommonInput
   }, [ensAddress, onChange, value]);
 
   const handleChange = useCallback(
-    (newValue: string) => {
+    (newValue?: string) => {
       setEnteredEnsName(undefined);
       onChange(newValue);
     },

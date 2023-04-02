@@ -1,7 +1,7 @@
 import { Actions } from "./Actions";
 import { Dimensions, DimensionsInfo } from "./DimensionsInfo";
 
-type ContentSpaceProps = {
+type AdspaceProps = {
   data: {
     dimensions: Dimensions;
     url: string;
@@ -10,7 +10,7 @@ type ContentSpaceProps = {
   onInitiateBid: () => void;
 };
 
-export const ContentSpace = ({ data, onInitiateBid }: ContentSpaceProps) => {
+export const Adspace = ({ data, onInitiateBid }: AdspaceProps) => {
   return (
     <div className="flex flex-col gap-4 px-2 py-8 first:pt-0 last:pb-0">
       <div className="flex gap-4">

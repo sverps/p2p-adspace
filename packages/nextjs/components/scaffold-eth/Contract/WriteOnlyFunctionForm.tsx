@@ -108,7 +108,7 @@ export const WriteOnlyFunctionForm = ({
             value={txValue}
             onChange={updatedTxValue => {
               setDisplayedTxResult(undefined);
-              setTxValue(updatedTxValue);
+              setTxValue(updatedTxValue as string | BigNumber);
             }}
             placeholder="value (wei)"
           />

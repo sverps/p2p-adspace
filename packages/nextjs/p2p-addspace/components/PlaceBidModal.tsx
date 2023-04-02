@@ -5,9 +5,9 @@ import { Dialog } from "@headlessui/react";
 import { BigNumber } from "ethers";
 import { InputBase, IntegerInput } from "~~/components/scaffold-eth";
 
-type PlaceBidModalProps = { contentSpaceIndex?: number; onClose: () => void };
+type PlaceBidModalProps = { adspaceIndex?: number; onClose: () => void };
 
-export const PlaceBidModal = ({ contentSpaceIndex, onClose }: PlaceBidModalProps) => {
+export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => {
   const { contract, isLoading } = useScaffoldContract("AdspaceMarketplace");
 
   const [bid, setBid] = useState<BigNumber | string>();
@@ -21,7 +21,7 @@ export const PlaceBidModal = ({ contentSpaceIndex, onClose }: PlaceBidModalProps
   }
 
   return (
-    <Dialog open={typeof contentSpaceIndex === "number"} onClose={onClose} className="">
+    <Dialog open={typeof adspaceIndex === "number"} onClose={onClose} className="">
       <div className="absolute z-20 w-full h-full top-0 left-0 bg-black opacity-25" />
       <Dialog.Panel className="flex flex-col absolute z-[21] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-base-100 border-base-300 border shadow-md rounded-3xl px-6 lg:px-8 py-6 lg:py-10 gap-4">
         <Dialog.Title>Place bid</Dialog.Title>
@@ -46,6 +46,7 @@ export const PlaceBidModal = ({ contentSpaceIndex, onClose }: PlaceBidModalProps
             className="btn btn-primary btn-sm"
             onClick={() => {
               if (
+                adspaceIndex === undefined ||
                 bid === undefined ||
                 ipfsAdCreative === undefined ||
                 adDestination === undefined ||
@@ -56,14 +57,14 @@ export const PlaceBidModal = ({ contentSpaceIndex, onClose }: PlaceBidModalProps
               }
 
               const args = [
-                BigNumber.from(contentSpaceIndex),
-                bid,
+                BigNumber.from(adspaceIndex),
+                bid as BigNumber,
                 ipfsAdCreative,
                 adDestination,
                 { value: BigNumber.from(value) },
               ] as const;
 
-              contract.bid(...(args as [BigNumber, BigNumber, string, string, { value: BigNumber }]));
+              contract.bid(...args);
             }}
           >
             Confirm

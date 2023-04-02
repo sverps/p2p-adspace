@@ -1,8 +1,8 @@
 import { BigNumber, BigNumberish } from "ethers";
 
 export interface CommonInputProps<T = string> {
-  value: T;
-  onChange: (newValue: T) => void;
+  value: T | undefined;
+  onChange: (newValue: T | undefined) => void;
   name?: string;
   placeholder?: string;
 }

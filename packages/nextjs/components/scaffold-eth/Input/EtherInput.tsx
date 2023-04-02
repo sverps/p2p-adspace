@@ -5,8 +5,8 @@ import { useAppStore } from "~~/services/store/store";
 
 const MAX_DECIMALS_USD = 2;
 
-function etherValueToDisplayValue(usdMode: boolean, etherValue: string, ethPrice: number) {
-  if (usdMode && ethPrice) {
+function etherValueToDisplayValue(usdMode: boolean, etherValue: string | undefined, ethPrice: number) {
+  if (usdMode && ethPrice && etherValue) {
     const parsedEthValue = parseFloat(etherValue);
     if (Number.isNaN(parsedEthValue)) {
       return etherValue;
@@ -49,7 +49,11 @@ export const EtherInput = ({ value, name, placeholder, onChange }: CommonInputPr
   // In usdMode, it is converted to its usd value, in regular mode it is unaltered
   const displayValue = useMemo(() => {
     const newDisplayValue = etherValueToDisplayValue(usdMode, value, ethPrice);
-    if (transitoryDisplayValue && parseFloat(newDisplayValue) === parseFloat(transitoryDisplayValue)) {
+    if (
+      transitoryDisplayValue &&
+      newDisplayValue &&
+      parseFloat(newDisplayValue) === parseFloat(transitoryDisplayValue)
+    ) {
       return transitoryDisplayValue;
     }
     // Clear any transitory display values that might be set
@@ -57,7 +61,10 @@ export const EtherInput = ({ value, name, placeholder, onChange }: CommonInputPr
     return newDisplayValue;
   }, [ethPrice, transitoryDisplayValue, usdMode, value]);
 
-  const handleChangeNumber = (newValue: string) => {
+  const handleChangeNumber = (newValue?: string) => {
+    if (!newValue) {
+      return;
+    }
     if (newValue && !SIGNED_NUMBER_REGEX.test(newValue)) {
       return;
     }

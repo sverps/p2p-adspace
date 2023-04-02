@@ -4,6 +4,9 @@ import { CommonInputProps, InputBase } from "~~/components/scaffold-eth";
 
 export const BytesInput = ({ value, onChange, name, placeholder }: CommonInputProps) => {
   const convertStringToBytes = useCallback(() => {
+    if (!value) {
+      return;
+    }
     onChange(
       ethers.utils.isHexString(value)
         ? ethers.utils.toUtf8String(value)
