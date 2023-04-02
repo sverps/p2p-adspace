@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useScaffoldContract } from "../hooks/useScaffoldContract";
 import { Actions } from "./Actions";
 import { Dialog } from "@headlessui/react";
 import { BigNumber } from "ethers";
 import { InputBase, IntegerInput } from "~~/components/scaffold-eth";
 
-type PlaceBidModalProps = { adspaceIndex?: number; onClose: () => void };
+type PlaceBidModalProps = { adspaceIndex?: number; onClose: (refetch?: boolean) => void };
 
 export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => {
   const { contract, isLoading } = useScaffoldContract("AdspaceMarketplace");
@@ -16,12 +16,23 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
 
   const [value, setValue] = useState<BigNumber | string>();
 
+  const handleClose = useCallback(
+    (refetch?: boolean) => {
+      setBid(undefined);
+      setIpfsAdCreative(undefined);
+      setAdDestination(undefined);
+      setValue(undefined);
+      onClose(refetch);
+    },
+    [onClose],
+  );
+
   if (isLoading || !contract) {
     return null;
   }
 
   return (
-    <Dialog open={typeof adspaceIndex === "number"} onClose={onClose} className="">
+    <Dialog open={typeof adspaceIndex === "number"} onClose={handleClose} className="">
       <div className="absolute z-20 w-full h-full top-0 left-0 bg-black opacity-25" />
       <Dialog.Panel className="flex flex-col absolute z-[21] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-base-100 border-base-300 border shadow-md rounded-3xl px-6 lg:px-8 py-6 lg:py-10 gap-4">
         <Dialog.Title>Place bid</Dialog.Title>
@@ -39,7 +50,7 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
         <IntegerInput name="value" placeholder="value" value={value} onChange={setValue} />
 
         <Actions>
-          <button className="btn btn-secondary btn-sm" onClick={onClose}>
+          <button className="btn btn-secondary btn-sm" onClick={() => handleClose()}>
             Cancel
           </button>
           <button
@@ -65,6 +76,7 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
               ] as const;
 
               contract.bid(...args);
+              handleClose(true);
             }}
           >
             Confirm

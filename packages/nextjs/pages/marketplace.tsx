@@ -32,10 +32,10 @@ const Marketplace: NextPage = () => {
       </div>
       <Pane className="gap-0 py-4 divide-y divide-base-300">
         {adspaces.length ? (
-          adspaces.map(({ websiteUrl, dimensions }, index) => (
+          adspaces.map(({ websiteUrl, dimensions, bidIndex }, index) => (
             <Adspace
-              key={`${websiteUrl}-${index}`}
-              data={{ dimensions, url: websiteUrl, costPerClick: 4 }}
+              key={`${websiteUrl}-${index}-${bidIndex}`}
+              data={{ index, dimensions, url: websiteUrl, bidIndex }}
               onInitiateBid={() => setContentSpaceIndex(index)}
             />
           ))
@@ -49,12 +49,23 @@ const Marketplace: NextPage = () => {
         open={adspaceModalOpen}
         onClose={(triggerRefetch?: boolean) => {
           if (triggerRefetch) {
+            // TODO: refetch after tx has been mined
             refetch();
           }
           setAdspaceModalOpen(false);
         }}
       />
-      <PlaceBidModal adspaceIndex={contentSpaceIndex} onClose={() => setContentSpaceIndex(undefined)} />
+      <PlaceBidModal
+        adspaceIndex={contentSpaceIndex}
+        onClose={(triggerRefetch?: boolean) => {
+          if (triggerRefetch) {
+            // TODO: only refetch for current adspace
+            // TODO: refetch after tx has been mined
+            refetch();
+          }
+          setContentSpaceIndex(undefined);
+        }}
+      />
     </Page>
   );
 };
