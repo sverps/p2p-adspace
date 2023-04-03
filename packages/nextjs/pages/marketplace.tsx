@@ -11,7 +11,7 @@ import { useAdspaces } from "~~/p2p-addspace/hooks/useAdspaces";
 
 const Marketplace: NextPage = () => {
   const [adspaceModalOpen, setAdspaceModalOpen] = useState(false);
-  const [contentSpaceIndex, setContentSpaceIndex] = useState<number>();
+  const [adspaceIndex, setAdspaceIndex] = useState<number>();
   const { data: adspaces, loading, refetch } = useAdspaces();
 
   if (loading) {
@@ -36,7 +36,7 @@ const Marketplace: NextPage = () => {
             <Adspace
               key={`${websiteUrl}-${index}-${bidIndex}`}
               data={{ index, dimensions, url: websiteUrl, bidIndex }}
-              onInitiateBid={() => setContentSpaceIndex(index)}
+              onInitiateBid={() => setAdspaceIndex(index)}
             />
           ))
         ) : (
@@ -49,21 +49,19 @@ const Marketplace: NextPage = () => {
         open={adspaceModalOpen}
         onClose={(triggerRefetch?: boolean) => {
           if (triggerRefetch) {
-            // TODO: refetch after tx has been mined
             refetch();
           }
           setAdspaceModalOpen(false);
         }}
       />
       <PlaceBidModal
-        adspaceIndex={contentSpaceIndex}
+        adspaceIndex={adspaceIndex}
         onClose={(triggerRefetch?: boolean) => {
           if (triggerRefetch) {
             // TODO: only refetch for current adspace
-            // TODO: refetch after tx has been mined
             refetch();
           }
-          setContentSpaceIndex(undefined);
+          setAdspaceIndex(undefined);
         }}
       />
     </Page>

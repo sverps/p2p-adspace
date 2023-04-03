@@ -1,20 +1,25 @@
-import { useCallback, useState } from "react";
-import { useScaffoldContract } from "../hooks/useScaffoldContract";
+import { useCallback, useEffect, useState } from "react";
 import { Actions } from "./Actions";
 import { Dialog } from "@headlessui/react";
 import { BigNumber } from "ethers";
-import { InputBase, IntegerInput } from "~~/components/scaffold-eth";
+import { EtherInput, InputBase, IntegerInput } from "~~/components/scaffold-eth";
+import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 type PlaceBidModalProps = { adspaceIndex?: number; onClose: (refetch?: boolean) => void };
 
 export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => {
-  const { contract, isLoading } = useScaffoldContract("AdspaceMarketplace");
-
   const [bid, setBid] = useState<BigNumber | string>();
   const [ipfsAdCreative, setIpfsAdCreative] = useState<string>();
   const [adDestination, setAdDestination] = useState<string>();
 
-  const [value, setValue] = useState<BigNumber | string>();
+  const [value, setValue] = useState<string>();
+
+  const { writeAsync, isSuccess } = useScaffoldContractWrite({
+    contractName: "AdspaceMarketplace",
+    functionName: "bid",
+    args: [BigNumber.from(adspaceIndex ?? 0), bid as BigNumber, ipfsAdCreative, adDestination],
+    value,
+  });
 
   const handleClose = useCallback(
     (refetch?: boolean) => {
@@ -27,9 +32,11 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
     [onClose],
   );
 
-  if (isLoading || !contract) {
-    return null;
-  }
+  useEffect(() => {
+    if (isSuccess) {
+      handleClose(true);
+    }
+  }, [isSuccess, handleClose]);
 
   return (
     <Dialog open={typeof adspaceIndex === "number"} onClose={handleClose} className="">
@@ -47,38 +54,13 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
         />
         <InputBase name="adDestination" placeholder="adDestination" value={adDestination} onChange={setAdDestination} />
 
-        <IntegerInput name="value" placeholder="value" value={value} onChange={setValue} />
+        <EtherInput name="value" placeholder="value" value={value} onChange={setValue} />
 
         <Actions>
           <button className="btn btn-secondary btn-sm" onClick={() => handleClose()}>
             Cancel
           </button>
-          <button
-            className="btn btn-primary btn-sm"
-            onClick={() => {
-              if (
-                adspaceIndex === undefined ||
-                bid === undefined ||
-                ipfsAdCreative === undefined ||
-                adDestination === undefined ||
-                value === undefined
-              ) {
-                console.error("Invalid arguments for 'bid()'");
-                return;
-              }
-
-              const args = [
-                BigNumber.from(adspaceIndex),
-                bid as BigNumber,
-                ipfsAdCreative,
-                adDestination,
-                { value: BigNumber.from(value) },
-              ] as const;
-
-              contract.bid(...args);
-              handleClose(true);
-            }}
-          >
+          <button className="btn btn-primary btn-sm" onClick={() => writeAsync()}>
             Confirm
           </button>
         </Actions>

@@ -14,7 +14,7 @@ type AdspaceProps = {
 };
 
 export const Adspace = ({ data, onInitiateBid }: AdspaceProps) => {
-  const { data: bids, loading } = useBids(data.index, data.bidIndex);
+  const { data: bids } = useBids(data.index, data.bidIndex);
 
   return (
     <div className="flex flex-col gap-4 px-2 py-8 first:pt-0 last:pb-0">
