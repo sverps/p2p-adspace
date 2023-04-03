@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { useBids } from "../hooks/useBids";
 import { Actions } from "./Actions";
+import { Bids } from "./Bids";
 import { Dimensions, DimensionsInfo } from "./DimensionsInfo";
 import { BigNumber } from "ethers";
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline";
 
 type AdspaceProps = {
   data: {
@@ -14,6 +17,7 @@ type AdspaceProps = {
 };
 
 export const Adspace = ({ data, onInitiateBid }: AdspaceProps) => {
+  const [expanded, setExpanded] = useState(false);
   const { data: bids } = useBids(data.index, data.bidIndex);
 
   return (
@@ -25,29 +29,23 @@ export const Adspace = ({ data, onInitiateBid }: AdspaceProps) => {
             <div className="flex-1">
               <div className="font-bold">{data.url}</div>
             </div>
-            {/* <div>
-              <div>{`Active: ${data.costPerClick}`}</div>
-            </div> */}
           </div>
         </div>
       </div>
-      <div>
-        {bids?.length
-          ? bids.map((bid, index) => (
-              <div key={index}>
-                <div>{bid.bidder}</div>
-                <div>{bid.bid.toNumber()}</div>
-                <div>{bid.adDestinationUrl}</div>
-                <div>{bid.ipfsAdCreative}</div>
-              </div>
-            ))
-          : "No bids yet"}
-      </div>
       <Actions>
+        <button disabled={!bids?.length} className="btn btn-secondary btn-sm" onClick={() => setExpanded(!expanded)}>
+          {expanded ? <ChevronUpIcon className="h-5 w-5 mr-2" /> : <ChevronDownIcon className="h-5 w-5 mr-2" />}
+          <span>
+            {expanded
+              ? `Hide bid${bids?.length !== 1 ? "s" : ""}`
+              : `See ${bids?.length} bid${bids?.length !== 1 ? "s" : ""}`}
+          </span>
+        </button>
         <button className="btn btn-secondary btn-sm" onClick={onInitiateBid}>
           Place bid
         </button>
       </Actions>
+      <Bids open={expanded} bids={bids} adspaceIndex={data.index} />
     </div>
   );
 };

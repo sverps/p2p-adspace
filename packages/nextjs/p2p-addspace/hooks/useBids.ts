@@ -3,6 +3,7 @@ import { useScaffoldContract } from "./useScaffoldContract";
 import { BigNumber } from "ethers";
 
 export type Bid = {
+  index: number;
   bidder: string;
   bid: BigNumber;
   ipfsAdCreative: string;
@@ -25,7 +26,8 @@ export const useBids = (adspaceIndex: number, bidIndex: BigNumber) => {
     );
 
     setBids(
-      result.map(({ bidder, bid, ipfsAdCreative, adDestinationUrl }) => ({
+      result.map(({ bidder, bid, ipfsAdCreative, adDestinationUrl }, index) => ({
+        index,
         bidder,
         bid,
         ipfsAdCreative,
