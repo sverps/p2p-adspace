@@ -1,6 +1,7 @@
 import { Bid } from "../hooks/useBids";
 import { Actions } from "./Actions";
-import { BigNumber } from "ethers";
+import { ImagePopover } from "./ImagePopover";
+import { BigNumber, ethers } from "ethers";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
@@ -19,9 +20,11 @@ export const BidView = ({ adspaceIndex, bid }: BidViewProps) => {
   return (
     <div className="w-full bg-slate-100 p-3">
       <Address address={bid.bidder} />
-      <div>{`Ξ ${bid.bid.toString()}`}</div>
+      <div>{`Ξ ${ethers.utils.formatEther(bid.bid)}`}</div>
       <div>{bid.adDestinationUrl}</div>
-      <div>{bid.ipfsAdCreative}</div>
+      <div>
+        <ImagePopover url={`https://ipfs.io/ipfs/${bid.ipfsAdCreative}`} />
+      </div>
       <Actions>
         <button
           className="btn btn-secondary btn-sm"

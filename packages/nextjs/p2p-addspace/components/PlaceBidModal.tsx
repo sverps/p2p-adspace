@@ -48,7 +48,7 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
         <IntegerInput name="bid" placeholder="bid" value={bid} onChange={setBid} />
         <InputBase
           name="ipfsAdCreative"
-          placeholder="ipfsAdCreative"
+          placeholder="Hash of the ipfs image to show in the ad"
           value={ipfsAdCreative}
           onChange={setIpfsAdCreative}
         />

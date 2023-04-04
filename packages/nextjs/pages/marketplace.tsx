@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { NextPage } from "next";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Spinner } from "~~/components/Spinner";
@@ -13,6 +13,27 @@ const Marketplace: NextPage = () => {
   const [adspaceModalOpen, setAdspaceModalOpen] = useState(false);
   const [adspaceIndex, setAdspaceIndex] = useState<number>();
   const { data: adspaces, loading, refetch } = useAdspaces();
+
+  const handleCloseAdspaceModal = useCallback(
+    (triggerRefetch?: boolean) => {
+      if (triggerRefetch) {
+        refetch();
+      }
+      setAdspaceModalOpen(false);
+    },
+    [refetch],
+  );
+
+  const handleClosePlaceBidModal = useCallback(
+    (triggerRefetch?: boolean) => {
+      if (triggerRefetch) {
+        // TODO: only refetch for current adspace
+        refetch();
+      }
+      setAdspaceIndex(undefined);
+    },
+    [refetch],
+  );
 
   if (loading) {
     return (
@@ -45,25 +66,8 @@ const Marketplace: NextPage = () => {
           </div>
         )}
       </Pane>
-      <AdspaceModal
-        open={adspaceModalOpen}
-        onClose={(triggerRefetch?: boolean) => {
-          if (triggerRefetch) {
-            refetch();
-          }
-          setAdspaceModalOpen(false);
-        }}
-      />
-      <PlaceBidModal
-        adspaceIndex={adspaceIndex}
-        onClose={(triggerRefetch?: boolean) => {
-          if (triggerRefetch) {
-            // TODO: only refetch for current adspace
-            refetch();
-          }
-          setAdspaceIndex(undefined);
-        }}
-      />
+      <AdspaceModal open={adspaceModalOpen} onClose={handleCloseAdspaceModal} />
+      <PlaceBidModal adspaceIndex={adspaceIndex} onClose={handleClosePlaceBidModal} />
     </Page>
   );
 };
