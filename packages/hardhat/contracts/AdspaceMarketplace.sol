@@ -115,6 +115,15 @@ contract AdspaceMarketplace {
     acceptedBids[_adspaceIndex] = newAcceptedBid;
   }
 
+  function activeCreative(uint256 _adspaceIndex) public returns (string memory ipfsHash, string memory adDestination) {
+    acceptedBid memory ab = acceptedBids[_adspaceIndex];
+    if (ab.adEndTimestamp == 0x0) {
+      return ("", "");
+    } else {
+      return (bids[_adspaceIndex][ab.bidIndex].ipfsAdCreative, bids[_adspaceIndex][ab.bidIndex].adDestinationUrl);
+    }
+  }
+
   function stopAd(uint256 _adspaceIndex) public {
     require(_adspaceIndex <= adspaceIndex, "Adspace does not exist");
 
