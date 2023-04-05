@@ -22,13 +22,6 @@ const burnerConfig = scaffoldConfig.burnerWallet;
 const enabledChains =
   (configuredNetwork.id as number) === 1 ? [configuredNetwork] : [configuredNetwork, chains.mainnet];
 
-console.log([
-  alchemyProvider({
-    apiKey: scaffoldConfig.alchemyApiKey,
-    priority: 0,
-  })(chains.localhost),
-  publicProvider({ priority: 1 })(chains.localhost),
-]);
 /**
  * Chains for the app
  */
