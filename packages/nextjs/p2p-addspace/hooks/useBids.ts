@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { addProtocolIfMissing } from "../utils/url";
 import { BigNumber } from "ethers";
 import { useContractReads } from "wagmi";
 import contractsData from "~~/generated/hardhat_contracts";
@@ -26,7 +27,7 @@ export const useBids = (adspaceIndex: number, bidIndex: BigNumber) => {
       ({
         data: bids?.map<Bid>(({ bidder, bid, ipfsAdCreative, adDestinationUrl }: any, index) => ({
           index,
-          adDestinationUrl,
+          adDestinationUrl: addProtocolIfMissing(adDestinationUrl),
           bid,
           bidder,
           ipfsAdCreative,

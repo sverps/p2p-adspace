@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
 
-type ImagePopoverProps = { url: string };
+type ImagePopoverProps = { label?: string; url: string };
 
-export const ImagePopover = ({ url }: ImagePopoverProps) => {
+export const ImagePopover = ({ label, url }: ImagePopoverProps) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -16,10 +16,10 @@ export const ImagePopover = ({ url }: ImagePopoverProps) => {
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
       >
-        {url}
+        {label ?? url}
       </a>
       <Transition
-        className="absolute p-1 bottom-6 left-1/2 -translate-x-1/2 bg-neutral-content drop-shadow-md rounded"
+        className="absolute p-1 bottom-6 left-1/2 -translate-x-1/2 bg-neutral-content drop-shadow-md rounded min-w-[200px]"
         show={open}
         enter="transition-opacity duration-250" // TODO: add height transition
         enterFrom="opacity-0"

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import contracts from "../../generated/hardhat_contracts";
 import { Dimensions } from "../components/DimensionsInfo";
+import { addProtocolIfMissing } from "../utils/url";
 import { BigNumber } from "ethers";
 import { useContract, useProvider } from "wagmi";
 
@@ -43,7 +44,11 @@ export const useAdspaces = () => {
     setAdspaces(
       result.map(adsp => {
         const dimensionsArray = adsp.dimensions.split(":").map(v => parseInt(v));
-        return { ...adsp, dimensions: { x: dimensionsArray[0], y: dimensionsArray[1] } };
+        return {
+          ...adsp,
+          websiteUrl: addProtocolIfMissing(adsp.websiteUrl),
+          dimensions: { x: dimensionsArray[0], y: dimensionsArray[1] },
+        };
       }),
     );
   }, [contract]);
