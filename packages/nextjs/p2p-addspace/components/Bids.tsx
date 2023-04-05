@@ -1,3 +1,4 @@
+import { AcceptedBid } from "../hooks/useAcceptedBid";
 import { Bid } from "../hooks/useBids";
 import { BidView } from "./BidView";
 import { Transition } from "@headlessui/react";
@@ -6,9 +7,10 @@ type BidsProps = {
   bids?: Bid[];
   open: boolean;
   adspaceIndex: number;
+  acceptedBid?: AcceptedBid;
 };
 
-export const Bids = ({ open, bids, adspaceIndex }: BidsProps) => {
+export const Bids = ({ open, bids, adspaceIndex, acceptedBid }: BidsProps) => {
   return (
     <Transition
       className="flex flex-col w-full gap-3"
@@ -21,7 +23,12 @@ export const Bids = ({ open, bids, adspaceIndex }: BidsProps) => {
       leaveTo="opacity-0"
     >
       {bids?.map((bid, index) => (
-        <BidView key={index} bid={bid} adspaceIndex={adspaceIndex} />
+        <BidView
+          key={index}
+          bid={bid}
+          adspaceIndex={adspaceIndex}
+          accepted={acceptedBid?.bidIndex.toNumber() === index}
+        />
       ))}
     </Transition>
   );

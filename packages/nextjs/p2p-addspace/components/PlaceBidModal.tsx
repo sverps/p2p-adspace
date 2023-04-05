@@ -9,7 +9,7 @@ type PlaceBidModalProps = { adspaceIndex?: number; onClose: (refetch?: boolean) 
 
 export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => {
   const [bid, setBid] = useState<BigNumber | string>();
-  const [ipfsAdCreative, setIpfsAdCreative] = useState<string>();
+  const [ipfsAdCreative, setIpfsAdCreative] = useState<string>(); // e.g. Qmd286K6pohQcTKYqnS1YhWrCiS4gz7Xi34sdwMe9USZ7u
   const [adDestination, setAdDestination] = useState<string>();
 
   const [value, setValue] = useState<string>();

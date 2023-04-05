@@ -8,9 +8,10 @@ import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 type BidViewProps = {
   adspaceIndex: number;
   bid: Bid;
+  accepted: boolean;
 };
 
-export const BidView = ({ adspaceIndex, bid }: BidViewProps) => {
+export const BidView = ({ adspaceIndex, bid, accepted }: BidViewProps) => {
   const { writeAsync } = useScaffoldContractWrite({
     contractName: "AdspaceMarketplace",
     functionName: "acceptBid",
@@ -18,7 +19,7 @@ export const BidView = ({ adspaceIndex, bid }: BidViewProps) => {
   });
 
   return (
-    <div className="w-full bg-slate-100 p-3">
+    <div className={`w-full bg-slate-100 p-3 ${accepted ? "border-2 border-green-400" : ""}`}>
       <Address address={bid.bidder} />
       <div>{`Ξ ${ethers.utils.formatEther(bid.bid)}`}</div>
       <div>{bid.adDestinationUrl}</div>
@@ -27,6 +28,7 @@ export const BidView = ({ adspaceIndex, bid }: BidViewProps) => {
       </div>
       <Actions>
         <button
+          disabled={accepted}
           className="btn btn-secondary btn-sm"
           onClick={() => {
             writeAsync();

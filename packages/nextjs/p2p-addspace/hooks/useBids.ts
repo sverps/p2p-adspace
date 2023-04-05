@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { useScaffoldContract } from "./useScaffoldContract";
+import { useMemo } from "react";
 import { BigNumber } from "ethers";
+import { useContractReads } from "wagmi";
+import contractsData from "~~/generated/hardhat_contracts";
 
 export type Bid = {
   index: number;
@@ -11,36 +12,30 @@ export type Bid = {
 };
 
 export const useBids = (adspaceIndex: number, bidIndex: BigNumber) => {
-  const { contract } = useScaffoldContract("AdspaceMarketplace");
-  const [bids, setBids] = useState<Bid[]>();
+  const { data: bids, refetch } = useContractReads({
+    contracts: Array.from({ length: bidIndex.toNumber() }).map((_, index) => ({
+      address: contractsData[31337][0].contracts.AdspaceMarketplace.address,
+      abi: contractsData[31337][0].contracts.AdspaceMarketplace.abi,
+      functionName: "bids",
+      args: [BigNumber.from(adspaceIndex), BigNumber.from(index)],
+    })),
+  });
 
-  const getBids = useCallback(async () => {
-    if (!contract) {
-      return;
-    }
-
-    const result = await Promise.all(
-      Array.from({ length: bidIndex.toNumber() }).map((_, index) =>
-        contract.bids(BigNumber.from(adspaceIndex), BigNumber.from(index)),
-      ),
-    );
-
-    setBids(
-      result.map(({ bidder, bid, ipfsAdCreative, adDestinationUrl }, index) => ({
-        index,
-        bidder,
-        bid,
-        ipfsAdCreative,
-        adDestinationUrl,
-      })),
-    );
-  }, [adspaceIndex, bidIndex, contract]);
-
-  useEffect(() => {
-    getBids();
-  }, [getBids]);
-
-  return { data: bids, loading: !bids, refetch: getBids } as
-    | { data: undefined; loading: true; refetch: () => void }
-    | { data: Bid[]; loading: false; refetch: () => void };
+  return useMemo(
+    () =>
+      ({
+        data: bids?.map<Bid>(({ bidder, bid, ipfsAdCreative, adDestinationUrl }: any, index) => ({
+          index,
+          adDestinationUrl,
+          bid,
+          bidder,
+          ipfsAdCreative,
+        })),
+        loading: !bids,
+        refetch,
+      } as
+        | { data: undefined; loading: true; refetch: () => void }
+        | { data: Bid[]; loading: false; refetch: () => void }),
+    [bids, refetch],
+  );
 };

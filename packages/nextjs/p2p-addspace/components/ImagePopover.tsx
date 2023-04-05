@@ -9,7 +9,13 @@ export const ImagePopover = ({ url }: ImagePopoverProps) => {
 
   return (
     <div className="relative">
-      <a href={url} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+      <a
+        href={url}
+        target="_blank"
+        rel="noreferrer"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
         {url}
       </a>
       <Transition

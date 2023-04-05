@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAcceptedBid } from "../hooks/useAcceptedBid";
 import { useBids } from "../hooks/useBids";
 import { Actions } from "./Actions";
 import { Bids } from "./Bids";
@@ -18,6 +19,7 @@ type AdspaceProps = {
 
 export const Adspace = ({ data, onInitiateBid }: AdspaceProps) => {
   const [expanded, setExpanded] = useState(false);
+  const { data: acceptedBid } = useAcceptedBid(data.index);
   const { data: bids } = useBids(data.index, data.bidIndex);
 
   return (
@@ -45,7 +47,7 @@ export const Adspace = ({ data, onInitiateBid }: AdspaceProps) => {
           Place bid
         </button>
       </Actions>
-      <Bids open={expanded} bids={bids} adspaceIndex={data.index} />
+      <Bids open={expanded} bids={bids} adspaceIndex={data.index} acceptedBid={acceptedBid} />
     </div>
   );
 };

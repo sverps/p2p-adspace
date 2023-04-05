@@ -32,7 +32,7 @@ contract AdspaceMarketplace {
     struct acceptedBid {
         uint256 adspaceIndex;
         uint256 bidIndex;
-        uint256 adStartTimestamp;
+        uint256 adEndTimestamp;
     }
 
     mapping(address => uint256) public userBalance;
@@ -78,7 +78,7 @@ contract AdspaceMarketplace {
         string memory _adDestinationUrl
     ) public payable {
         require(_adspaceIndex <= adspaceIndex, "Adspace does not exist");
-        require(msg.value >= _bid, "Bid amount does not match msg.value");
+        require(msg.value + userBalance[msg.sender] >= _bid, "msg.value plus available balance is lower than bid amount");
 
         topUpBlance();
 
@@ -104,7 +104,7 @@ contract AdspaceMarketplace {
         userBalance[bidder] -= bids[_adspaceIndex][_bidIndex].bid;
         userBalance[owner] += bids[_adspaceIndex][_bidIndex].bid;
 
-        acceptedBid memory newAcceptedBid = acceptedBid(_adspaceIndex, _bidIndex, block.timestamp);
+        acceptedBid memory newAcceptedBid = acceptedBid(_adspaceIndex, _bidIndex, block.timestamp + defaultAdDuration);
 
         acceptedBids[_adspaceIndex] = newAcceptedBid;
     }
@@ -116,9 +116,8 @@ contract AdspaceMarketplace {
         require(msg.sender == owner, "Only the owner can stop an ad");
 
         acceptedBid memory activeAcceptedBid = acceptedBids[_adspaceIndex];
-        uint256 adEndTimestamp = activeAcceptedBid.adStartTimestamp + defaultAdDuration;
 
-        require(block.timestamp > adEndTimestamp, "Ad has not ended yet");
+        require(block.timestamp > activeAcceptedBid.adEndTimestamp, "Ad has not ended yet");
 
         delete acceptedBids[_adspaceIndex];
     }
