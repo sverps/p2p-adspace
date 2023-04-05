@@ -17,21 +17,21 @@ export const AdspaceStatus = ({
   className?: string;
   onTriggerRefetch: () => void;
 }) => {
-  let color: string;
+  let colors: string[];
   let Icon: any;
   let status: Status;
   if (!acceptedBid || acceptedBid.adEndTimestamp.toNumber() * 1000 < new Date().getTime()) {
     status = Status.OPEN;
-    color = "bg-yellow";
+    colors = ["bg-yellow-300"];
   } else {
     Icon = RocketLaunchIcon;
-    color = "bg-green";
+    colors = ["bg-green-300", "bg-green-100"];
     status = Status.ACTIVE;
   }
 
   return (
-    <div className={`flex flex-col items-center gap-1 rounded-[1rem] ${color}-100 ${className ?? ""}`}>
-      <div className={`flex items-center px-6 py-1 rounded-[1rem] ${color}-300`}>
+    <div className={`flex flex-col items-center gap-1 pb-1 rounded-[1rem] ${colors[1] ?? ""} ${className ?? ""}`}>
+      <div className={`flex items-center px-6 py-1 rounded-[1rem] ${colors[0]}`}>
         {Icon && <Icon className="w-5 h-5 mr-2" />}
         {status}
       </div>

@@ -50,8 +50,6 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
       <div className="absolute z-20 w-full h-full top-0 left-0 bg-black opacity-25" />
       <Dialog.Panel className="flex flex-col absolute z-[21] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-base-100 border-base-300 border shadow-md rounded-3xl px-6 lg:px-8 py-6 lg:py-10 gap-4">
         <Dialog.Title>Place bid</Dialog.Title>
-        {/* <Dialog.Description>This will permanently deactivate your account</Dialog.Description> */}
-
         <IntegerInput name="bid" placeholder="bid" value={bid} onChange={setBid} />
         <InputBase
           name="ipfsAdCreative"

@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { AdDisplay } from "~~/p2p-addspace/components/AdDisplay";
 
 const Home: NextPage = () => {
   return (
@@ -16,6 +17,7 @@ const Home: NextPage = () => {
           <h1 className="text-center mb-8">
             <span className="block text-2xl mb-2">Welcome to</span>
             <span className="block text-4xl font-bold">scaffold-eth 2</span>
+            <AdDisplay adIndex={0} chainId={31337} rpcUrl="http://localhost:8545" />
           </h1>
           <p className="text-center text-lg">
             Get started by editing{" "}

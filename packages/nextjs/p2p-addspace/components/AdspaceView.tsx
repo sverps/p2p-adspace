@@ -34,7 +34,7 @@ export const AdspaceView = ({ adspace, onInitiateBid }: AdspaceProps) => {
               <LinkIcon className="h-4 w-4 ml-2" />
             </a>
           </div>
-          <div className="flex w-full items-center">{`Dimensions: ${adspace.dimensions.x}px : ${adspace.dimensions.x}px`}</div>
+          <div className="flex w-full items-center">{`Dimensions: ${adspace.dimensions.x}px : ${adspace.dimensions.y}px`}</div>
           {acceptedBid ? (
             <div className="flex w-full items-center">
               <ImagePopover label="Creative" url={`https://ipfs.io/ipfs/${acceptedBid.ipfsAdCreative}`} />
