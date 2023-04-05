@@ -8,6 +8,7 @@ import { useContract, useProvider } from "wagmi";
 const adspaceContract = contracts[31337][0].contracts.AdspaceMarketplace;
 
 export type Adspace = {
+  index: number;
   owner: string;
   websiteUrl: string;
   dimensions: Dimensions;
@@ -42,10 +43,11 @@ export const useAdspaces = () => {
     );
 
     setAdspaces(
-      result.map(adsp => {
+      result.map((adsp, index) => {
         const dimensionsArray = adsp.dimensions.split(":").map(v => parseInt(v));
         return {
           ...adsp,
+          index,
           websiteUrl: addProtocolIfMissing(adsp.websiteUrl),
           dimensions: { x: dimensionsArray[0], y: dimensionsArray[1] },
         };

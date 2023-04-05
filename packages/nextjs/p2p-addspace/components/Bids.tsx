@@ -1,4 +1,4 @@
-import { AcceptedBid } from "../hooks/useAcceptedBid";
+import { EnrichedAcceptedBid } from "../hooks/useAcceptedBid";
 import { Bid } from "../hooks/useBids";
 import { BidView } from "./BidView";
 import { Transition } from "@headlessui/react";
@@ -7,7 +7,7 @@ type BidsProps = {
   bids?: Bid[];
   open: boolean;
   adspaceIndex: number;
-  acceptedBid?: AcceptedBid;
+  acceptedBid?: EnrichedAcceptedBid;
 };
 
 export const Bids = ({ open, bids, adspaceIndex, acceptedBid }: BidsProps) => {

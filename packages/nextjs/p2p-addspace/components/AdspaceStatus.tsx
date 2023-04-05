@@ -30,8 +30,8 @@ export const AdspaceStatus = ({
   }
 
   return (
-    <div className={`flex flex-col items-center gap-1 rounded-[1rem] ${color}-100`}>
-      <div className={`flex items-center px-6 py-1 rounded-[1rem] ${color}-300 ${className ?? ""}`}>
+    <div className={`flex flex-col items-center gap-1 rounded-[1rem] ${color}-100 ${className ?? ""}`}>
+      <div className={`flex items-center px-6 py-1 rounded-[1rem] ${color}-300`}>
         {Icon && <Icon className="w-5 h-5 mr-2" />}
         {status}
       </div>

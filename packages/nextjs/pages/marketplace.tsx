@@ -2,8 +2,8 @@ import { useCallback, useState } from "react";
 import type { NextPage } from "next";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Spinner } from "~~/components/Spinner";
-import { Adspace } from "~~/p2p-addspace/components/Adspace";
 import { AdspaceModal } from "~~/p2p-addspace/components/AdspaceModal";
+import { AdspaceView } from "~~/p2p-addspace/components/AdspaceView";
 import { Page } from "~~/p2p-addspace/components/Page";
 import { Pane } from "~~/p2p-addspace/components/Pane";
 import { PlaceBidModal } from "~~/p2p-addspace/components/PlaceBidModal";
@@ -53,11 +53,11 @@ const Marketplace: NextPage = () => {
       </div>
       <Pane className="gap-0 py-4 divide-y divide-base-300">
         {adspaces.length ? (
-          adspaces.map(({ websiteUrl, dimensions, bidIndex }, index) => (
-            <Adspace
-              key={`${websiteUrl}-${index}-${bidIndex}`}
-              data={{ index, dimensions, url: websiteUrl, bidIndex }}
-              onInitiateBid={() => setAdspaceIndex(index)}
+          adspaces.map(adspace => (
+            <AdspaceView
+              key={`${adspace.websiteUrl}-${adspace.index}-${adspace.bidIndex}`}
+              adspace={adspace}
+              onInitiateBid={() => setAdspaceIndex(adspace.index)}
             />
           ))
         ) : (

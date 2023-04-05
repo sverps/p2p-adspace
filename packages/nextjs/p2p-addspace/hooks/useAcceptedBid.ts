@@ -31,10 +31,6 @@ export const useAcceptedBid = (adspaceIndex: number, bids?: Bid[]) => {
 
   const acceptedBid = useMemo(() => {
     const acceptedBid = bids?.find(bid => bid.index === acceptedBidFromContract?.bidIndex.toNumber());
-    console.log({
-      currentTime,
-      adEndTime: acceptedBidFromContract ? acceptedBidFromContract.adEndTimestamp.toNumber() * 1000 : undefined,
-    });
     if (
       !acceptedBid ||
       !acceptedBidFromContract ||

@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from "react";
 import { Transition } from "@headlessui/react";
+import { PhotoIcon } from "@heroicons/react/24/outline";
 
 type ImagePopoverProps = { label?: string; url: string };
 
@@ -15,8 +16,10 @@ export const ImagePopover = ({ label, url }: ImagePopoverProps) => {
         rel="noreferrer"
         onMouseEnter={() => setOpen(true)}
         onMouseLeave={() => setOpen(false)}
+        className="flex"
       >
-        {label ?? url}
+        <span>{label ?? url}</span>
+        <PhotoIcon className="w-5 h-5 ml-2" />
       </a>
       <Transition
         className="absolute p-1 bottom-6 left-1/2 -translate-x-1/2 bg-neutral-content drop-shadow-md rounded min-w-[200px]"
@@ -33,10 +36,3 @@ export const ImagePopover = ({ label, url }: ImagePopoverProps) => {
     </div>
   );
 };
-
-// <Dialog open={open} onClose={() => undefined}>
-//   {/* <div className="absolute z-20 w-full h-full top-0 left-0 bg-black opacity-25" /> */}
-//   <Dialog.Panel className="flex flex-col absolute z-[21] top-20 left-1/2 -translate-x-1/2 bg-base-100 border-base-300 border shadow-md rounded-3xl px-6 lg:px-8 py-6 lg:py-10 gap-4">
-//     <img src={url} onClick={() => setOpen(false)} alt={url} width="300px" height="300px" />
-//   </Dialog.Panel>
-// </Dialog>
