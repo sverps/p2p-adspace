@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Bid } from "./useBids";
 import { BigNumber } from "ethers";
 import { useScaffoldContractRead } from "~~/hooks/scaffold-eth";
@@ -18,6 +18,7 @@ export type EnrichedAcceptedBid = AcceptedBid & {
 };
 
 export const useAcceptedBid = (adspaceIndex: number, bids?: Bid[]) => {
+  const [currentTime, setCurrentTime] = useState(new Date().getTime());
   const {
     data: acceptedBidFromContract,
     isLoading,
@@ -30,18 +31,29 @@ export const useAcceptedBid = (adspaceIndex: number, bids?: Bid[]) => {
 
   const acceptedBid = useMemo(() => {
     const acceptedBid = bids?.find(bid => bid.index === acceptedBidFromContract?.bidIndex.toNumber());
-    if (!acceptedBid || acceptedBidFromContract?.adEndTimestamp.toNumber() === 0) {
+    console.log({
+      currentTime,
+      adEndTime: acceptedBidFromContract ? acceptedBidFromContract.adEndTimestamp.toNumber() * 1000 : undefined,
+    });
+    if (
+      !acceptedBid ||
+      !acceptedBidFromContract ||
+      acceptedBidFromContract.adEndTimestamp.toNumber() * 1000 <= currentTime
+    ) {
       return undefined;
     }
     return { ...acceptedBid, ...acceptedBidFromContract };
-  }, [acceptedBidFromContract, bids]);
+  }, [acceptedBidFromContract, bids, currentTime]);
 
   return useMemo(
     () =>
       ({
         data: acceptedBid,
         loading: isLoading,
-        refetch,
+        refetch: () => {
+          setCurrentTime(new Date().getTime());
+          refetch();
+        },
       } as
         | { data: undefined; loading: true; refetch: () => void }
         | { data: EnrichedAcceptedBid; loading: false; refetch: () => void }),

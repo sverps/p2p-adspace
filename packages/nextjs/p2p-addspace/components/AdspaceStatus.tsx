@@ -1,4 +1,5 @@
-import { AcceptedBid } from "../hooks/useAcceptedBid";
+import { EnrichedAcceptedBid } from "../hooks/useAcceptedBid";
+import Countdown from "react-countdown";
 import { RocketLaunchIcon } from "@heroicons/react/24/outline";
 
 export enum Status {
@@ -7,23 +8,36 @@ export enum Status {
   CLOSED = "CLOSED",
 }
 
-export const AdspaceStatus = ({ acceptedBid, className = "" }: { acceptedBid?: AcceptedBid; className?: string }) => {
-  const classes: string[] = [className];
-  let label: string;
+export const AdspaceStatus = ({
+  acceptedBid,
+  className = "",
+  onTriggerRefetch,
+}: {
+  acceptedBid?: EnrichedAcceptedBid;
+  className?: string;
+  onTriggerRefetch: () => void;
+}) => {
+  let color: string;
   let Icon: any;
+  let status: Status;
   if (!acceptedBid || acceptedBid.adEndTimestamp.toNumber() * 1000 < new Date().getTime()) {
-    label = Status.OPEN;
-    classes.unshift("bg-yellow-300");
+    status = Status.OPEN;
+    color = "bg-yellow";
   } else {
     Icon = RocketLaunchIcon;
-    label = Status.ACTIVE;
-    classes.unshift("bg-green-300");
+    color = "bg-green";
+    status = Status.ACTIVE;
   }
 
   return (
-    <div className={`flex items-center px-4 py-1 rounded-full ${classes.join(" ")}`}>
-      {Icon && <Icon className="w-5 h-5 mr-2" />}
-      {label}
+    <div className={`flex flex-col items-center gap-1 rounded-[1rem] ${color}-100`}>
+      <div className={`flex items-center px-6 py-1 rounded-[1rem] ${color}-300 ${className ?? ""}`}>
+        {Icon && <Icon className="w-5 h-5 mr-2" />}
+        {status}
+      </div>
+      {status === Status.ACTIVE && acceptedBid && (
+        <Countdown date={acceptedBid.adEndTimestamp.toNumber() * 1000 + 500} onComplete={onTriggerRefetch} />
+      )}
     </div>
   );
 };

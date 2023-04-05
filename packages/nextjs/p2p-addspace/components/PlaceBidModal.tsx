@@ -11,13 +11,20 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
   const [bid, setBid] = useState<BigNumber | string>();
   const [ipfsAdCreative, setIpfsAdCreative] = useState<string>(); // e.g. Qmd286K6pohQcTKYqnS1YhWrCiS4gz7Xi34sdwMe9USZ7u
   const [adDestination, setAdDestination] = useState<string>();
+  const [adDuration, setAdDuration] = useState<BigNumber | string>();
 
   const [value, setValue] = useState<string>();
 
   const { writeAsync, isSuccess } = useScaffoldContractWrite({
     contractName: "AdspaceMarketplace",
     functionName: "bid",
-    args: [BigNumber.from(adspaceIndex ?? 0), bid as BigNumber, ipfsAdCreative, adDestination],
+    args: [
+      BigNumber.from(adspaceIndex ?? 0),
+      bid as BigNumber,
+      ipfsAdCreative,
+      adDestination,
+      BigNumber.from(adDuration ?? 0),
+    ],
     value,
   });
 
@@ -52,7 +59,18 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
           value={ipfsAdCreative}
           onChange={setIpfsAdCreative}
         />
-        <InputBase name="adDestination" placeholder="adDestination" value={adDestination} onChange={setAdDestination} />
+        <InputBase
+          name="adDestination"
+          placeholder="Ad destination"
+          value={adDestination}
+          onChange={setAdDestination}
+        />
+        <IntegerInput
+          name="adDuration"
+          placeholder="Ad duration (in seconds)"
+          value={adDuration}
+          onChange={setAdDuration}
+        />
 
         <EtherInput name="value" placeholder="value" value={value} onChange={setValue} />
 

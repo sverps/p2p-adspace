@@ -4,126 +4,131 @@ pragma solidity >=0.8.0 <0.9.0;
 import "hardhat/console.sol";
 
 /**
- * A smart contract that website owners to publish their adspace 
+ * A smart contract that website owners to publish their adspace
  * and advertisers to bid on it.
  * So it creates a peer-to-peer marketplace for adspace.
  * @author Ben Dumoulin
  */
 contract AdspaceMarketplace {
+  uint256 public adspaceIndex = 0;
+  uint256 public defaultAdDuration = 7 days;
 
-    uint256 public adspaceIndex = 0;
-    uint256 public defaultAdDuration = 7 days;
+  struct Adspace {
+    address owner;
+    string websiteUrl;
+    string dimensions;
+    string restrictions;
+    uint256 bidIndex;
+  }
 
-    struct Adspace {
-        address owner;
-        string websiteUrl;
-        string dimensions;
-        string restrictions;
-        uint256 bidIndex;
-    }
+  struct Bid {
+    address bidder;
+    uint256 bid;
+    string ipfsAdCreative;
+    string adDestinationUrl;
+    uint256 adDuration;
+  }
 
-    struct Bid {
-        address bidder;
-        uint256 bid;
-        string ipfsAdCreative;
-        string adDestinationUrl;
-    }
+  struct acceptedBid {
+    uint256 adspaceIndex;
+    uint256 bidIndex;
+    uint256 adEndTimestamp;
+  }
 
-    struct acceptedBid {
-        uint256 adspaceIndex;
-        uint256 bidIndex;
-        uint256 adEndTimestamp;
-    }
+  mapping(address => uint256) public userBalance;
+  mapping(uint256 => Adspace) public adspaces;
+  mapping(uint256 => mapping(uint256 => Bid)) public bids; // adspaceIndex => bidIndex => Bid
+  mapping(uint256 => acceptedBid) public acceptedBids;
 
-    mapping(address => uint256) public userBalance;
-    mapping(uint256 => Adspace) public adspaces;
-    mapping(uint256 => mapping(uint256 => Bid)) public bids; // adspaceIndex => bidIndex => Bid
-    mapping(uint256 => acceptedBid) public acceptedBids;
+  function getAdspaceIndex() public view returns (uint256) {
+    return adspaceIndex;
+  }
 
+  function getAdspaceFromIndex(uint256 _adspaceIndex) public view returns (Adspace memory) {
+    return adspaces[_adspaceIndex];
+  }
 
-    function getAdspaceIndex() public view returns (uint256) {
-        return adspaceIndex;
-    }
+  function topUpBlance() public payable {
+    userBalance[msg.sender] += msg.value;
+  }
 
-    function getAdspaceFromIndex(uint256 _adspaceIndex) public view returns (Adspace memory) {
-        return adspaces[_adspaceIndex];
-    }
+  function withdrawBlance() public {
+    uint256 amount = userBalance[msg.sender];
+    userBalance[msg.sender] = 0;
+    payable(msg.sender).transfer(amount);
+  }
 
-    function topUpBlance() public payable {
-        userBalance[msg.sender] += msg.value;
-    }
+  // Publish an Adspace
+  function publish(string memory _websiteUrl, string memory _dimensions, string memory _restrictions) public {
+    Adspace memory newAdspace = Adspace(msg.sender, _websiteUrl, _dimensions, _restrictions, 0);
+    adspaces[adspaceIndex] = newAdspace;
+    adspaceIndex++;
+  }
 
-    function withdrawBlance() public {
-        uint256 amount = userBalance[msg.sender];
-        userBalance[msg.sender] = 0;
-        payable(msg.sender).transfer(amount);
-    }
+  // Bid on an Adspace
+  function bid(
+    uint256 _adspaceIndex,
+    uint256 _bid,
+    string memory _ipfsAdCreative,
+    string memory _adDestinationUrl,
+    uint256 _adDuration
+  ) public payable {
+    require(_adspaceIndex <= adspaceIndex, "Adspace does not exist");
+    require(msg.value + userBalance[msg.sender] >= _bid, "msg.value plus available balance is lower than bid amount");
 
-    // Publish an Adspace
-    function publish(
-        string memory _websiteUrl, 
-        string memory _dimensions, 
-        string memory _restrictions
-    ) public {
-        Adspace memory newAdspace = Adspace(msg.sender, _websiteUrl, _dimensions, _restrictions, 0);
-        adspaces[adspaceIndex] = newAdspace;
-        adspaceIndex++;
-    }
+    topUpBlance();
 
-    // Bid on an Adspace
-    function bid(
-        uint256 _adspaceIndex,
-        uint256 _bid,
-        string memory _ipfsAdCreative,
-        string memory _adDestinationUrl
-    ) public payable {
-        require(_adspaceIndex <= adspaceIndex, "Adspace does not exist");
-        require(msg.value + userBalance[msg.sender] >= _bid, "msg.value plus available balance is lower than bid amount");
+    uint256 bidIndex = adspaces[_adspaceIndex].bidIndex;
 
-        topUpBlance();
+    Bid memory newBid = Bid(
+      msg.sender,
+      _bid,
+      _ipfsAdCreative,
+      _adDestinationUrl,
+      _adDuration == 0 ? defaultAdDuration : _adDuration
+    );
+    bids[_adspaceIndex][bidIndex] = newBid;
 
-        uint256 bidIndex = adspaces[_adspaceIndex].bidIndex;
+    adspaces[_adspaceIndex].bidIndex++;
+  }
 
-        Bid memory newBid = Bid(msg.sender, _bid, _ipfsAdCreative, _adDestinationUrl);
-        bids[_adspaceIndex][bidIndex] = newBid;
+  // Chose which bid to accept on an Adspace
+  function acceptBid(uint256 _adspaceIndex, uint256 _bidIndex) public {
+    require(_adspaceIndex <= adspaceIndex, "Adspace does not exist");
+    require(_bidIndex <= adspaces[_adspaceIndex].bidIndex, "Bid does not exist");
 
-        adspaces[_adspaceIndex].bidIndex++;
-    }
+    address bidder = bids[_adspaceIndex][_bidIndex].bidder;
+    address owner = adspaces[_adspaceIndex].owner;
 
-    // Chose which bid to accept on an Adspace
-    function acceptBid(uint256 _adspaceIndex, uint256 _bidIndex) public {
-        require(_adspaceIndex <= adspaceIndex, "Adspace does not exist");
-        require(_bidIndex <= adspaces[_adspaceIndex].bidIndex, "Bid does not exist");
+    require(msg.sender == owner, "Only the owner can accept a bid");
+    require(userBalance[bidder] >= bids[_adspaceIndex][_bidIndex].bid, "Bidder does not have enough balance");
 
-        address bidder = bids[_adspaceIndex][_bidIndex].bidder;
-        address owner = adspaces[_adspaceIndex].owner;
+    userBalance[bidder] -= bids[_adspaceIndex][_bidIndex].bid;
+    userBalance[owner] += bids[_adspaceIndex][_bidIndex].bid;
 
-        require(msg.sender == owner, "Only the owner can accept a bid");
-        require(userBalance[bidder] >= bids[_adspaceIndex][_bidIndex].bid, "Bidder does not have enough balance");
+    acceptedBid memory newAcceptedBid = acceptedBid(
+      _adspaceIndex,
+      _bidIndex,
+      block.timestamp + bids[_adspaceIndex][_bidIndex].adDuration
+    );
 
-        userBalance[bidder] -= bids[_adspaceIndex][_bidIndex].bid;
-        userBalance[owner] += bids[_adspaceIndex][_bidIndex].bid;
+    acceptedBids[_adspaceIndex] = newAcceptedBid;
+  }
 
-        acceptedBid memory newAcceptedBid = acceptedBid(_adspaceIndex, _bidIndex, block.timestamp + defaultAdDuration);
+  function stopAd(uint256 _adspaceIndex) public {
+    require(_adspaceIndex <= adspaceIndex, "Adspace does not exist");
 
-        acceptedBids[_adspaceIndex] = newAcceptedBid;
-    }
+    address owner = adspaces[_adspaceIndex].owner;
+    require(msg.sender == owner, "Only the owner can stop an ad");
 
-    function stopAd(uint256 _adspaceIndex) public {
-        require(_adspaceIndex <= adspaceIndex, "Adspace does not exist");
+    acceptedBid memory activeAcceptedBid = acceptedBids[_adspaceIndex];
 
-        address owner = adspaces[_adspaceIndex].owner;
-        require(msg.sender == owner, "Only the owner can stop an ad");
+    require(block.timestamp > activeAcceptedBid.adEndTimestamp, "Ad has not ended yet");
 
-        acceptedBid memory activeAcceptedBid = acceptedBids[_adspaceIndex];
+    delete acceptedBids[_adspaceIndex];
+  }
 
-        require(block.timestamp > activeAcceptedBid.adEndTimestamp, "Ad has not ended yet");
-
-        delete acceptedBids[_adspaceIndex];
-    }
-
-    receive() external payable {
-        topUpBlance();
-    }
-
+  receive() external payable {
+    topUpBlance();
+  }
 }

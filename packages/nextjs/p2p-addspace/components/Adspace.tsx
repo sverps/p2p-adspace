@@ -22,7 +22,7 @@ type AdspaceProps = {
 export const Adspace = ({ data, onInitiateBid }: AdspaceProps) => {
   const [expanded, setExpanded] = useState(false);
   const { data: bids } = useBids(data.index, data.bidIndex);
-  const { data: acceptedBid } = useAcceptedBid(data.index, bids);
+  const { data: acceptedBid, refetch } = useAcceptedBid(data.index, bids);
 
   return (
     <div className="flex flex-col gap-4 px-2 py-8 first:pt-0 last:pb-0">
@@ -36,16 +36,13 @@ export const Adspace = ({ data, onInitiateBid }: AdspaceProps) => {
                 <LinkIcon className="h-4 w-4 ml-2" />
               </a>
             </div>
-            <AdspaceStatus acceptedBid={acceptedBid} />
+            <AdspaceStatus acceptedBid={acceptedBid} onTriggerRefetch={refetch} />
           </div>
           <div className="flex w-full items-center">{`Dimensions: ${data.dimensions.x}px : ${data.dimensions.x}px`}</div>
           {acceptedBid ? (
-            <>
-              <div className="flex w-full items-center">
-                <ImagePopover label="Creative" url={`https://ipfs.io/ipfs/${acceptedBid.ipfsAdCreative}`} />
-              </div>
-              <div className="flex w-full items-center">{`Dimensions: ${data.dimensions.x}px : ${data.dimensions.x}px`}</div>
-            </>
+            <div className="flex w-full items-center">
+              <ImagePopover label="Creative" url={`https://ipfs.io/ipfs/${acceptedBid.ipfsAdCreative}`} />
+            </div>
           ) : null}
         </div>
       </div>
