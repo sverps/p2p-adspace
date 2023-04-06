@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import Head from "next/head";
 import type { NextPage } from "next";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Spinner } from "~~/components/Spinner";
@@ -35,39 +36,41 @@ const Marketplace: NextPage = () => {
     [refetch],
   );
 
-  if (loading) {
-    return (
-      <Page>
-        <Spinner />
-      </Page>
-    );
-  }
-
   return (
     <Page>
-      <div className="w-full">
-        <button className="btn btn-secondary bg-base-100" onClick={() => setAdspaceModalOpen(true)}>
-          <PlusIcon className="h-4 w-4" />
-          new adspace
-        </button>
-      </div>
-      <Pane className="gap-0 py-4 divide-y divide-base-300">
-        {adspaces.length ? (
-          adspaces.map(adspace => (
-            <AdspaceView
-              key={`${adspace.websiteUrl}-${adspace.index}-${adspace.bidIndex}`}
-              adspace={adspace}
-              onInitiateBid={() => setAdspaceIndex(adspace.index)}
-            />
-          ))
-        ) : (
-          <div className="flex flex-col gap-8">
-            <span>No adspaces found.</span>
+      <Head>
+        <title>Adspace marketplace</title>
+        <meta name="description" content="Create and bit on adspaces" />
+      </Head>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <>
+          <div className="w-full">
+            <button className="btn btn-secondary bg-base-100" onClick={() => setAdspaceModalOpen(true)}>
+              <PlusIcon className="h-4 w-4" />
+              new adspace
+            </button>
           </div>
-        )}
-      </Pane>
-      <AdspaceModal open={adspaceModalOpen} onClose={handleCloseAdspaceModal} />
-      <PlaceBidModal adspaceIndex={adspaceIndex} onClose={handleClosePlaceBidModal} />
+          <Pane className="gap-0 py-4 divide-y divide-base-300">
+            {adspaces.length ? (
+              adspaces.map(adspace => (
+                <AdspaceView
+                  key={`${adspace.websiteUrl}-${adspace.index}-${adspace.bidIndex}`}
+                  adspace={adspace}
+                  onInitiateBid={() => setAdspaceIndex(adspace.index)}
+                />
+              ))
+            ) : (
+              <div className="flex flex-col gap-8">
+                <span>No adspaces found.</span>
+              </div>
+            )}
+          </Pane>
+          <AdspaceModal open={adspaceModalOpen} onClose={handleCloseAdspaceModal} />
+          <PlaceBidModal adspaceIndex={adspaceIndex} onClose={handleClosePlaceBidModal} />
+        </>
+      )}
     </Page>
   );
 };
