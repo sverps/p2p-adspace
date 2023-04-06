@@ -1,26 +1,30 @@
 /* eslint-disable @next/next/no-img-element */
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Transition } from "@headlessui/react";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 
-type ImagePopoverProps = { label?: string; url: string };
+type ImagePopoverProps = { label?: string; url: string; children?: ReactNode };
 
-export const ImagePopover = ({ label, url }: ImagePopoverProps) => {
+export const ImagePopover = ({ label, url, children }: ImagePopoverProps) => {
   const [open, setOpen] = useState(false);
 
   return (
     <div className="relative">
-      <a
-        href={url}
-        target="_blank"
-        rel="noreferrer"
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-        className="flex"
-      >
-        <span>{label ?? url}</span>
-        <PhotoIcon className="w-5 h-5 ml-2" />
-      </a>
+      {children ? (
+        children
+      ) : (
+        <a
+          href={url}
+          target="_blank"
+          rel="noreferrer"
+          onMouseEnter={() => setOpen(true)}
+          onMouseLeave={() => setOpen(false)}
+          className="flex"
+        >
+          <span>{label ?? url}</span>
+          <PhotoIcon className="w-5 h-5 ml-2" />
+        </a>
+      )}
       <Transition
         className="absolute p-1 bottom-6 left-1/2 -translate-x-1/2 bg-neutral-content drop-shadow-md rounded min-w-[200px]"
         show={open}

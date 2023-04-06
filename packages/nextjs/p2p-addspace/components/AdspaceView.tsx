@@ -2,12 +2,18 @@ import { useState } from "react";
 import { useAcceptedBid } from "../hooks/useAcceptedBid";
 import { Adspace } from "../hooks/useAdspaces";
 import { useBids } from "../hooks/useBids";
+import { useSnippetGenerator } from "../hooks/useSnippetGenerator";
 import { Actions } from "./Actions";
 import { AdspaceStatus } from "./AdspaceStatus";
 import { Bids } from "./Bids";
 import { DimensionsInfo } from "./DimensionsInfo";
-import { ImagePopover } from "./ImagePopover";
-import { ChevronDownIcon, ChevronUpIcon, LinkIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowLongRightIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  CodeBracketIcon,
+  LinkIcon,
+} from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 
 type AdspaceProps = {
@@ -20,26 +26,37 @@ export const AdspaceView = ({ adspace, onInitiateBid }: AdspaceProps) => {
   const { data: bids } = useBids(adspace.index, adspace.bidIndex);
   const { data: acceptedBid, refetch } = useAcceptedBid(adspace.index, bids);
 
+  const copySnippet = useSnippetGenerator({ adspaceIndex: adspace.index });
+
   return (
     <div className="flex flex-col gap-4 px-2 py-8 first:pt-0 last:pb-0">
       <div className="flex gap-4">
-        <DimensionsInfo dimensions={adspace.dimensions} />
-        <div className="flex-1 relative flex flex-col justify-start gap-3">
-          <div className="flex items-center">
+        <DimensionsInfo dimensions={adspace.dimensions} acceptedBid={acceptedBid} />
+        <div className="flex-1 relative flex flex-col justify-start gap-2">
+          <div className="flex items-center py-2">
             <Address address={adspace.owner} />
           </div>
-          <div className="flex items-center">
-            <span className="font-bold">{adspace.websiteUrl}</span>
-            <a href={adspace.websiteUrl} target="_blank" rel="noreferrer">
-              <LinkIcon className="h-4 w-4 ml-2" />
-            </a>
+          <span>{`Dimensions: ${adspace.dimensions.x}px : ${adspace.dimensions.y}px`}</span>
+          <div className="flex items-center cursor-pointer" onClick={copySnippet}>
+            <span>Embed</span>
+            <CodeBracketIcon className="h-5 w-5 ml-2 text-sky-600" />
           </div>
-          <div className="flex w-full items-center">{`Dimensions: ${adspace.dimensions.x}px : ${adspace.dimensions.y}px`}</div>
-          {acceptedBid ? (
-            <div className="flex w-full items-center">
-              <ImagePopover label="Creative" url={`https://ipfs.io/ipfs/${acceptedBid.ipfsAdCreative}`} />
-            </div>
-          ) : null}
+
+          <div className="flex items-center justify-between">
+            <a className="flex items-center" href={adspace.websiteUrl} target="_blank" rel="noreferrer">
+              <span className="font-bold">{adspace.websiteUrl}</span>
+              <LinkIcon className="h-5 w-5 ml-2 text-sky-600" />
+            </a>
+            {acceptedBid && (
+              <>
+                <ArrowLongRightIcon className="w-4 h-4" />
+                <a className="flex items-center" href={acceptedBid.adDestinationUrl} target="_blank" rel="noreferrer">
+                  <span className="font-bold">{acceptedBid.adDestinationUrl}</span>
+                  <LinkIcon className="h-5 w-5 ml-2 text-sky-600" />
+                </a>
+              </>
+            )}
+          </div>
           <AdspaceStatus acceptedBid={acceptedBid} onTriggerRefetch={refetch} className="absolute top-0 right-0" />
         </div>
       </div>

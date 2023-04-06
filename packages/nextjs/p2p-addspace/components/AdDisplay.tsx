@@ -13,7 +13,7 @@ export const AdDisplay = ({ adIndex, rpcUrl, chainId }: AdDisplayProps) => {
   useEffect(() => {
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl, chainId);
     const adspaceContract = new ethers.Contract(
-      "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+      "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       [
         "function bids(uint256 adspaceIndex, uint256 bidIndex) public view returns (address bidder, uint256 bid, string ipfsAdCreative, string adDestinationUrl, uint256 adDuration)",
         "function acceptedBids(uint256 adspaceIndex) public view returns (uint256, uint256, uint256)",
@@ -29,13 +29,17 @@ export const AdDisplay = ({ adIndex, rpcUrl, chainId }: AdDisplayProps) => {
     }
 
     (async function () {
-      const [, bidIndex, adEndTimestamp] = (await adspaceContract.acceptedBids(BigNumber.from(adIndex))) ?? [];
-      if ((adEndTimestamp as BigNumber).toNumber() * 1000 <= new Date().getTime()) {
+      try {
+        const [, bidIndex, adEndTimestamp] = (await adspaceContract.acceptedBids(BigNumber.from(adIndex))) ?? [];
+        if ((adEndTimestamp as BigNumber).toNumber() * 1000 <= new Date().getTime()) {
+          setAcceptedBid(undefined);
+          return;
+        }
+        const [, , ipfsAdCreative, adDestinationUrl] = (await adspaceContract.bids(adIndex, bidIndex)) ?? [];
+        setAcceptedBid({ hash: ipfsAdCreative, url: addProtocolIfMissing(adDestinationUrl) });
+      } catch (e) {
         setAcceptedBid(undefined);
-        return;
       }
-      const [, , ipfsAdCreative, adDestinationUrl] = (await adspaceContract.bids(adIndex, bidIndex)) ?? [];
-      setAcceptedBid({ hash: ipfsAdCreative, url: addProtocolIfMissing(adDestinationUrl) });
     })();
   }, [adIndex, chainId, rpcUrl]);
 
@@ -71,7 +75,7 @@ export const AdDisplay = ({ adIndex, rpcUrl, chainId }: AdDisplayProps) => {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
+            strokeWidth="1.5"
             stroke="currentColor"
             className="w-6 h-6"
           >
