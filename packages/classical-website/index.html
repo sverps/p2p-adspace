@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>Test website</title>
+  <meta name="description" content="Website to test ad">
+</head>
+
+<body>
+  <div style="display: flex; justify-content: center; align-items: center; height: 100vh; width: 100%">
+
+    <!-- Start of ad -->
+    <div id="0x5FbDB2315678afecb367f032d93F642f64180aa3-0" style="position: relative; width: 640px; height: 480px;">
+      <div
+        style="flex: 1; height: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; box-sizing: border-box; border: solid 1px  #666;">
+        <span>No ad running.</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="26px" height="26px" fill="none" viewBox="0 0 24 24"
+          stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+        </svg>
+      </div>
+      <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+      <script>const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545", 31337), adspaceContract = new ethers.Contract("0x5FbDB2315678afecb367f032d93F642f64180aa3", ["function bids(uint256 adspaceIndex, uint256 bidIndex) public view returns (address bidder, uint256 bid, string ipfsAdCreative, string adDestinationUrl, uint256 adDuration)", "function acceptedBids(uint256 adspaceIndex) public view returns (uint256, uint256, uint256)"], provider); function addProtocolIfMissing(e) { return e.includes("://") ? e : "https://" + e } !async function () { const e = document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").getElementsByTagName("a"); try { const [, t, n] = await adspaceContract.acceptedBids(ethers.BigNumber.from(0)) ?? []; if (1e3 * n.toNumber() <= (new Date).getTime()) return void (e?.length && document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").removeChild(e[0])); const [, , a, i] = await adspaceContract.bids(0, t) ?? [], r = document.createElement("a"); r.href = addProtocolIfMissing(i), r.target = "_blank", r.rel = "noreferrer", r.style = "position: absolute; background-image: url(https://ipfs.io/ipfs/" + a + ");background-repeat: no-repeat; background-position: center; background-siize: cover; width: 100%; height: 100%;", document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").prepend(r) } catch (t) { e?.length && document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").removeChild(e[0]), console.warn(t) } }();</script>
+    </div>
+    <!-- End of ad -->
+
+  </div>
+</body>
+
+</html>
