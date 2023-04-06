@@ -1,4 +1,5 @@
 import { Bid } from "../hooks/useBids";
+import { formatDuration } from "../utils/time";
 import { Actions } from "./Actions";
 import { ImagePopover } from "./ImagePopover";
 import { BigNumber, ethers } from "ethers";
@@ -19,9 +20,9 @@ export const BidView = ({ adspaceIndex, bid, accepted }: BidViewProps) => {
   });
 
   return (
-    <div className={`w-full bg-slate-100 p-3 ${accepted ? "border-2 border-green-400" : ""}`}>
+    <div className={`flex flex-col w-full bg-slate-100 p-3 gap-1 ${accepted ? "border-2 border-green-400" : ""}`}>
       <Address address={bid.bidder} />
-      <div>{`Ξ ${ethers.utils.formatEther(bid.bid)}`}</div>
+      <div>{`Ξ ${ethers.utils.formatEther(bid.bid)} / 🕑 ${bid.adDuration.toNumber()}`}</div>
       <div>{bid.adDestinationUrl}</div>
       <div>
         <ImagePopover url={`https://ipfs.io/ipfs/${bid.ipfsAdCreative}`} />

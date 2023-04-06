@@ -10,6 +10,7 @@ export type Bid = {
   bid: BigNumber;
   ipfsAdCreative: string;
   adDestinationUrl: string;
+  adDuration: BigNumber;
 };
 
 export const useBids = (adspaceIndex: number, bidIndex: BigNumber) => {
@@ -25,9 +26,10 @@ export const useBids = (adspaceIndex: number, bidIndex: BigNumber) => {
   return useMemo(
     () =>
       ({
-        data: bids?.map<Bid>(({ bidder, bid, ipfsAdCreative, adDestinationUrl }: any, index) => ({
+        data: bids?.map<Bid>(({ bidder, bid, ipfsAdCreative, adDestinationUrl, adDuration }: any, index) => ({
           index,
           adDestinationUrl: addProtocolIfMissing(adDestinationUrl),
+          adDuration,
           bid,
           bidder,
           ipfsAdCreative,
