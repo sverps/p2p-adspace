@@ -16,7 +16,7 @@ It's a new monetisation primitive for small sites. Consider it an alternative to
 
 2. The website owner copies the code snippet in their site.
 
-This snippet runs without dependencies. 
+This snippet is self-contained and can be plugged into any site (independent of the technology that was used to build it). 
 
 3. Advertisers palce bids.  
   
