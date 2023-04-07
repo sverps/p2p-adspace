@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { NextPage } from "next";
 import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { AdDisplay } from "~~/p2p-addspace/components/AdDisplay";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const Home: NextPage = () => {
   return (
@@ -16,16 +17,17 @@ const Home: NextPage = () => {
         <div className="px-5">
           <h1 className="text-center mb-8">
             <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">scaffold-eth 2</span>
-            <AdDisplay adIndex={0} chainId={31337} rpcUrl="http://localhost:8545" />
+            <span className="block text-4xl font-bold">Adspace marketplace</span>
+            {getTargetNetwork().id === 31337 && (
+              <AdDisplay adIndex={0} chainId={31337} rpcUrl="http://localhost:8545" />
+            )}
           </h1>
           <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/nextjs/pages/index.tsx</code>
+            The adspace marketplace is deployed <a href="https://adspace-marketplace.vercel.app/marketplace">here</a>{" "}
+            and connects to Sepolia.
           </p>
-          <p className="text-center text-lg">
-            Edit your smart contract <code className="italic bg-base-300 text-base font-bold">YourContract.sol</code> in{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/hardhat/contracts</code>
+          <p>
+            Code can be found on <a href="https://github.com/sverps/p2p-addspace">github</a>
           </p>
         </div>
 
