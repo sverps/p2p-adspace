@@ -4,8 +4,8 @@ This is our submission for the 🏗Scaffold-Eth 2 💎 Hackathon 🛠 (March 27 
 
 ## The video walkthrough
 
-We built a lightweight decentralized version of Google AdWords:
-🎥 coming soon...
+We built a lightweight decentralized version of Google AdWords:  
+🎥 Video walkthrough: https://www.loom.com/share/ef4853ae72bf4d16ad4c4ca00c382dea
 
 ## Our project
   
