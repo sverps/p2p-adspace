@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { Actions } from "./Actions";
 import { Dialog } from "@headlessui/react";
-import { BigNumber } from "ethers";
+import { BigNumber, utils } from "ethers";
 import { EtherInput, InputBase, IntegerInput } from "~~/components/scaffold-eth";
 import { useScaffoldContractWrite } from "~~/hooks/scaffold-eth";
 
 type PlaceBidModalProps = { adspaceIndex?: number; onClose: (refetch?: boolean) => void };
 
 export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => {
-  const [bid, setBid] = useState<BigNumber | string>();
   const [ipfsAdCreative, setIpfsAdCreative] = useState<string>(); // e.g. Qmd286K6pohQcTKYqnS1YhWrCiS4gz7Xi34sdwMe9USZ7u
   const [adDestination, setAdDestination] = useState<string>();
   const [adDuration, setAdDuration] = useState<BigNumber | string>();
@@ -20,7 +19,7 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
     functionName: "bid",
     args: [
       BigNumber.from(adspaceIndex ?? 0),
-      bid as BigNumber,
+      value ? utils.parseEther(value) : undefined,
       ipfsAdCreative,
       adDestination,
       BigNumber.from(adDuration ?? 0),
@@ -30,7 +29,6 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
 
   const handleClose = useCallback(
     (refetch?: boolean) => {
-      setBid(undefined);
       setIpfsAdCreative(undefined);
       setAdDestination(undefined);
       setValue(undefined);
@@ -50,7 +48,6 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
       <div className="absolute z-20 w-full h-full top-0 left-0 bg-black opacity-25" />
       <Dialog.Panel className="flex flex-col absolute z-[21] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 bg-base-100 border-base-300 border shadow-md rounded-3xl px-6 lg:px-8 py-6 lg:py-10 gap-4">
         <Dialog.Title>Place bid</Dialog.Title>
-        <IntegerInput name="bid" placeholder="bid" value={bid} onChange={setBid} />
         <InputBase
           name="ipfsAdCreative"
           placeholder="Hash of the ipfs image to show in the ad"
@@ -70,7 +67,7 @@ export const PlaceBidModal = ({ adspaceIndex, onClose }: PlaceBidModalProps) => 
           onChange={setAdDuration}
         />
 
-        <EtherInput name="value" placeholder="value" value={value} onChange={setValue} />
+        <EtherInput name="value" placeholder="bid amount" value={value} onChange={setValue} />
 
         <Actions>
           <button className="btn btn-secondary btn-sm" onClick={() => handleClose()}>

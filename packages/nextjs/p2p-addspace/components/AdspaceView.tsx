@@ -9,6 +9,7 @@ import { Bids } from "./Bids";
 import { DimensionsInfo } from "./DimensionsInfo";
 import {
   ArrowLongRightIcon,
+  CheckCircleIcon,
   ChevronDownIcon,
   ChevronUpIcon,
   CodeBracketIcon,
@@ -26,7 +27,7 @@ export const AdspaceView = ({ adspace, onInitiateBid }: AdspaceProps) => {
   const { data: bids } = useBids(adspace.index, adspace.bidIndex);
   const { data: acceptedBid, refetch } = useAcceptedBid(adspace.index, bids);
 
-  const copySnippet = useSnippetGenerator({ adspaceIndex: adspace.index });
+  const { copySnippet, justCopied } = useSnippetGenerator({ adspaceIndex: adspace.index });
 
   return (
     <div className="flex flex-col gap-4 px-2 py-8 first:pt-0 last:pb-0">
@@ -39,7 +40,11 @@ export const AdspaceView = ({ adspace, onInitiateBid }: AdspaceProps) => {
           <span>{`Dimensions: ${adspace.dimensions.x}px : ${adspace.dimensions.y}px`}</span>
           <div className="flex items-center cursor-pointer" onClick={copySnippet}>
             <span>Embed</span>
-            <CodeBracketIcon className="h-5 w-5 ml-2 text-sky-600" />
+            {justCopied ? (
+              <CheckCircleIcon className="h-5 w-5 ml-2 text-sky-600" aria-hidden="true" />
+            ) : (
+              <CodeBracketIcon className="h-5 w-5 ml-2 text-sky-600" />
+            )}
           </div>
 
           <div className="flex items-center justify-between">

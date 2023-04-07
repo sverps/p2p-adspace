@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import contracts from "../../generated/hardhat_contracts";
 import { Dimensions } from "../components/DimensionsInfo";
 import { addProtocolIfMissing } from "../utils/url";
 import { BigNumber } from "ethers";
 import { useContract, useProvider } from "wagmi";
+import contractsData from "~~/generated/hardhat_contracts";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
-const adspaceContract = contracts[31337][0].contracts.AdspaceMarketplace;
+const adspaceContract = contractsData[getTargetNetwork().id as unknown as "31337"][0].contracts.AdspaceMarketplace;
 
 export type Adspace = {
   index: number;

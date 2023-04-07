@@ -3,6 +3,9 @@ import { addProtocolIfMissing } from "../utils/url";
 import { BigNumber } from "ethers";
 import { useContractReads } from "wagmi";
 import contractsData from "~~/generated/hardhat_contracts";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
+
+const adspaceContract = contractsData[getTargetNetwork().id as unknown as "31337"][0].contracts.AdspaceMarketplace;
 
 export type Bid = {
   index: number;
@@ -16,8 +19,8 @@ export type Bid = {
 export const useBids = (adspaceIndex: number, bidIndex: BigNumber) => {
   const { data: bids, refetch } = useContractReads({
     contracts: Array.from({ length: bidIndex.toNumber() }).map((_, index) => ({
-      address: contractsData[31337][0].contracts.AdspaceMarketplace.address,
-      abi: contractsData[31337][0].contracts.AdspaceMarketplace.abi,
+      address: adspaceContract.address,
+      abi: adspaceContract.abi,
       functionName: "bids",
       args: [BigNumber.from(adspaceIndex), BigNumber.from(index)],
     })),

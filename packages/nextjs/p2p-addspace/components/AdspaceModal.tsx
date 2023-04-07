@@ -15,7 +15,7 @@ export const AdspaceModal = ({ open, onClose }: AdspaceModalProps) => {
   const { writeAsync, isSuccess } = useScaffoldContractWrite({
     contractName: "AdspaceMarketplace",
     functionName: "publish",
-    args: [url, `${width}:${height}`, restrictions],
+    args: [url, `${width}:${height}`, restrictions ?? ""],
   });
 
   const handleClose = useCallback(
@@ -43,7 +43,7 @@ export const AdspaceModal = ({ open, onClose }: AdspaceModalProps) => {
         {/* <Dialog.Description>This will permanently deactivate your account</Dialog.Description> */}
 
         <InputBase name="url" placeholder="url" value={url} onChange={setUrl} />
-        <InputBase name="restrictions" placeholder="restrictions" value={restrictions} onChange={setRestrictions} />
+        <InputBase name="restrictions" placeholder="description" value={restrictions} onChange={setRestrictions} />
         <div className="flex gap-4">
           <InputBase<number> type="number" name="width" placeholder="width" value={width} onChange={setWidth} />
           <InputBase<number> type="number" name="height" placeholder="height" value={height} onChange={setHeight} />
