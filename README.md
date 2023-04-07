@@ -1,16 +1,19 @@
-# 🎺📢 P2P Adspace | 🏗Scaffold-Eth 2 💎 Hackathon 🛠
+# 🎺📢 P2P Adspace 
 
-## 🎥 The video walkthrough
+This is our submission for the 🏗Scaffold-Eth 2 💎 Hackathon 🛠 (March 27 - April 8, 2023).
 
-coming soon...
+## The video walkthrough
 
-## 📦 Our project
+We built a lightweight decentralized version of Google AdWords:
+🎥 coming soon...
+
+## Our project
   
 A peer-to-peer adspace marketplace.  
   
 It's a new monetisation primitive for small sites. Consider it an alternative to  'buy me a coffee' or 'donate at this address'. With additial roles and protection mechanisms, we believe it could even be a Google Adwords alternative. 
 
-## 💡 How it works
+## How it works
 
 1. Website owner goes to the Marketplace to create a new adspace: https://adspace-marketplace.vercel.app/marketplace
 
@@ -19,7 +22,7 @@ It's a new monetisation primitive for small sites. Consider it an alternative to
 This snippet runs without dependencies. 
 
 3. Advertisers palce bids.  
-  
+
 A bid contains a creative (IPFS hash), an ad destination, an ad duration, an bid amount.
 
 4. Website owner copies the accepts the ad they like most. 
@@ -36,5 +39,5 @@ A bid contains a creative (IPFS hash), an ad destination, an ad duration, an bid
 
 This is built with Scaffold-Eth 2.  
   
-If you want to fork or contribute to the repo, check out the SE2 README for usage instructions:  
+🤝 If you want to fork or contribute to the repo, check out the SE-2 README for usage instructions:  
 https://github.com/scaffold-eth/se-2
