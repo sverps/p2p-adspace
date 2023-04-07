@@ -14,17 +14,13 @@ It's a new monetisation primitive for small sites. Consider it an alternative to
 
 1. Website owner goes to the Marketplace to create a new adspace: https://adspace-marketplace.vercel.app/marketplace
 
-2. The website owner copies the code snippet in their site.
+2. The website owner copies the code snippet in their site. (This snippet is self-contained and can be plugged into any site, independent of the technology that was used to build it.)
 
-This snippet is self-contained and can be plugged into any site (independent of the technology that was used to build it). 
+3. Advertisers place bids. (A bid contains a creative (IPFS hash), an ad destination, an ad duration, an bid amount.)
 
-3. Advertisers palce bids.  
-  
-A bid contains a creative (IPFS hash), an ad destination, an ad duration, an bid amount.
+4. Website owner checks and accepts the ad they like most (and they receive the bid amount as payment). 
 
-4. Website owner copies the accepts the ad they like most. 
-
-5. The snippet starts displaying the ad and the countdown timer starts
+5. The snippet starts displaying the ad for the duration that was set.
 
 ## Deployed links:
 
