@@ -1,17 +1,16 @@
-# 🎺📢 P2P Adspace 
+# 🎺📢 P2P Addspace
 
-This is our submission for the 🏗Scaffold-Eth 2 💎 Hackathon 🛠 (March 27 - April 8, 2023).
+This is our project submission for the 🏗Scaffold-Eth 2 💎 Hackathon 🛠 (March 27 - April 8, 2023).
 
-## The video walkthrough
+## Our project  
 
-We built a lightweight decentralized version of Google AdWords:  
-🎥 Video walkthrough: https://www.loom.com/share/ef4853ae72bf4d16ad4c4ca00c382dea
-
-## Our project
+🎥 Video demo: https://www.loom.com/share/ef4853ae72bf4d16ad4c4ca00c382dea
   
-A peer-to-peer adspace marketplace.  
+P2P Addspace: A peer-to-peer adspace marketplace.  
   
-It's a new monetisation primitive for small sites. Consider it an alternative to  'buy me a coffee' or 'donate at this address'. With additial roles and protection mechanisms, we believe it could even be a Google Adwords alternative. 
+Currently, it's a new monetisation primitive for small sites. Consider it an alternative to  'buy me a coffee' or 'donate at this address'.  
+
+With additial protection mechanisms, it could be a Google Adwords alternative, but without a middleman who takes most of the revenue.
 
 ## How it works
 
@@ -25,7 +24,7 @@ It's a new monetisation primitive for small sites. Consider it an alternative to
 
 5. The snippet starts displaying the ad for the duration that was set.
 
-## Deployed links:
+## Deployed links
 
 - ⛓ Deployed smart contract: https://sepolia.etherscan.io/address/0xCBe18BC3773C570F83aEA16591583a20BC65b2a9#code
   
