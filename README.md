@@ -1,4 +1,4 @@
-# 🎺📢 P2P Addspace
+# 🎺📢 P2P Adspace
 
 This is our project submission for the 🏗Scaffold-Eth 2 💎 Hackathon 🛠 (March 27 - April 8, 2023).
 
