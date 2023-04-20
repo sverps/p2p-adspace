@@ -6,7 +6,7 @@ This is our project submission for the 🏗Scaffold-Eth 2 💎 Hackathon 🛠 (M
 
 🎥 Video demo: https://www.loom.com/share/ef4853ae72bf4d16ad4c4ca00c382dea
   
-P2P Addspace: A peer-to-peer adspace marketplace.  
+P2P Adspace: A peer-to-peer adspace marketplace.  
   
 Currently, it's a new monetisation primitive for small sites. Consider it an alternative to  'buy me a coffee' or 'donate at this address'.  
 
