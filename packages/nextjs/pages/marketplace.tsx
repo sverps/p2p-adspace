@@ -3,12 +3,12 @@ import Head from "next/head";
 import type { NextPage } from "next";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Spinner } from "~~/components/Spinner";
-import { AdspaceModal } from "~~/p2p-addspace/components/AdspaceModal";
-import { AdspaceView } from "~~/p2p-addspace/components/AdspaceView";
-import { Page } from "~~/p2p-addspace/components/Page";
-import { Pane } from "~~/p2p-addspace/components/Pane";
-import { PlaceBidModal } from "~~/p2p-addspace/components/PlaceBidModal";
-import { useAdspaces } from "~~/p2p-addspace/hooks/useAdspaces";
+import { AdspaceModal } from "~~/p2p-adspace/components/AdspaceModal";
+import { AdspaceView } from "~~/p2p-adspace/components/AdspaceView";
+import { Page } from "~~/p2p-adspace/components/Page";
+import { Pane } from "~~/p2p-adspace/components/Pane";
+import { PlaceBidModal } from "~~/p2p-adspace/components/PlaceBidModal";
+import { useAdspaces } from "~~/p2p-adspace/hooks/useAdspaces";
 
 const Marketplace: NextPage = () => {
   const [adspaceModalOpen, setAdspaceModalOpen] = useState(false);

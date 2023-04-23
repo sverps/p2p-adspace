@@ -21,7 +21,7 @@ export const ImagePopover = ({ label, url, children }: ImagePopoverProps) => {
           onMouseLeave={() => setOpen(false)}
           className="flex"
         >
-          <span>{label ?? url}</span>
+          <span className="truncate">{label ?? url}</span>
           <PhotoIcon className="w-5 h-5 ml-2" />
         </a>
       )}

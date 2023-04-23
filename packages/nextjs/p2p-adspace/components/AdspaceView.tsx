@@ -3,6 +3,7 @@ import { useAcceptedBid } from "../hooks/useAcceptedBid";
 import { Adspace } from "../hooks/useAdspaces";
 import { useBids } from "../hooks/useBids";
 import { useSnippetGenerator } from "../hooks/useSnippetGenerator";
+import { md } from "../utils/media";
 import { Actions } from "./Actions";
 import { AdspaceStatus } from "./AdspaceStatus";
 import { Bids } from "./Bids";
@@ -31,7 +32,7 @@ export const AdspaceView = ({ adspace, onInitiateBid }: AdspaceProps) => {
 
   return (
     <div className="flex flex-col gap-4 px-2 py-8 first:pt-0 last:pb-0">
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-col md:flex-row">
         <DimensionsInfo dimensions={adspace.dimensions} acceptedBid={acceptedBid} />
         <div className="flex-1 relative flex flex-col justify-start gap-2">
           <div className="flex items-center py-2">
@@ -47,7 +48,7 @@ export const AdspaceView = ({ adspace, onInitiateBid }: AdspaceProps) => {
             )}
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col md:items-center md:justify-between md:flex-row">
             <a className="flex items-center" href={adspace.websiteUrl} target="_blank" rel="noreferrer">
               <span className="font-bold">{adspace.websiteUrl}</span>
               <LinkIcon className="h-5 w-5 ml-2 text-sky-600" />

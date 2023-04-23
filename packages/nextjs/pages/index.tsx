@@ -2,7 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
-import { AdDisplay } from "~~/p2p-addspace/components/AdDisplay";
+import { AdDisplay } from "~~/p2p-adspace/components/AdDisplay";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const Home: NextPage = () => {

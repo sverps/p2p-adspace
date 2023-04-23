@@ -4,7 +4,7 @@ module.exports = {
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
     "./utils/**/*.{js,ts,jsx,tsx}",
-    "./p2p-addspace/**/*.{js,ts,jsx,tsx}",
+    "./p2p-adspace/**/*.{js,ts,jsx,tsx}",
   ],
   plugins: [require("daisyui")],
   darkTheme: "scaffoldEthDark",
