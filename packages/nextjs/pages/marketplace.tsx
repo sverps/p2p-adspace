@@ -37,7 +37,7 @@ const Marketplace: NextPage = () => {
   );
 
   return (
-    <Page>
+    <Page data-theme="marketplace">
       <Head>
         <title>Adspace marketplace</title>
         <meta name="description" content="Create and bit on adspaces" />
@@ -52,21 +52,21 @@ const Marketplace: NextPage = () => {
               new adspace
             </button>
           </div>
-          <Pane className="gap-0 py-4 divide-y divide-base-300">
-            {adspaces.length ? (
-              adspaces.map(adspace => (
-                <AdspaceView
-                  key={`${adspace.websiteUrl}-${adspace.index}-${adspace.bidIndex}`}
-                  adspace={adspace}
-                  onInitiateBid={() => setAdspaceIndex(adspace.index)}
-                />
-              ))
-            ) : (
+          {adspaces.length ? (
+            adspaces.map(adspace => (
+              <AdspaceView
+                key={`${adspace.websiteUrl}-${adspace.index}-${adspace.bidIndex}`}
+                adspace={adspace}
+                onInitiateBid={() => setAdspaceIndex(adspace.index)}
+              />
+            ))
+          ) : (
+            <Pane className="gap-0 py-4 divide-y divide-base-300">
               <div className="flex flex-col gap-8">
                 <span>No adspaces found.</span>
               </div>
-            )}
-          </Pane>
+            </Pane>
+          )}
           <AdspaceModal open={adspaceModalOpen} onClose={handleCloseAdspaceModal} />
           <PlaceBidModal adspaceIndex={adspaceIndex} onClose={handleClosePlaceBidModal} />
         </>
