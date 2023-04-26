@@ -11,7 +11,52 @@ export async function generateSnippet({
   chainId: number;
   adspaceIndex: number;
 }) {
-  const { code } = await minify(`const provider = new ethers.providers.JsonRpcProvider("${rpcUrl}", ${chainId});
+  // const { code } = await minify(`const provider = new ethers.providers.JsonRpcProvider("${rpcUrl}", ${chainId});
+  // const adspaceContract = new ethers.Contract(
+  //   "${contractAddress}",
+  //   [
+  //     "function bids(uint256 adspaceIndex, uint256 bidIndex) public view returns (address bidder, uint256 bid, string ipfsAdCreative, string adDestinationUrl, uint256 adDuration)",
+  //     "function acceptedBids(uint256 adspaceIndex) public view returns (uint256, uint256, uint256)",
+  //   ],
+  //   provider,
+  // );
+  // function addProtocolIfMissing(url) {
+  //   if (url.includes("://")) {
+  //     return url;
+  //   }
+  //   return "https://" + url;
+  // }
+  // (async function () {
+  //   const innerATags = document.getElementById("${contractAddress}-${adspaceIndex}").getElementsByTagName('a');
+  //   try {
+  //     const [, bidIndex, adEndTimestamp] = (await adspaceContract.acceptedBids(ethers.BigNumber.from(${adspaceIndex}))) ?? [];
+  //     if (adEndTimestamp.toNumber() * 1000 <= new Date().getTime()) {
+  //       if (innerATags?.length) {
+  //         document.getElementById("${contractAddress}-${adspaceIndex}").removeChild(
+  //           innerATags[0]
+  //         );
+  //       }
+  //       return;
+  //     }
+  //     const [, , ipfsAdCreative, adDestinationUrl] = (await adspaceContract.bids(${adspaceIndex}, bidIndex)) ?? [];
+  //     const image = document.createElement("a");
+  //     image.href = addProtocolIfMissing(adDestinationUrl);
+  //     image.target = "_blank";
+  //     image.rel = "noreferrer";
+  //     image.style = "position: absolute; background-image: url(https://ipfs.io/ipfs/" + ipfsAdCreative + ");" +
+  //       "background-repeat: no-repeat; background-position: center; background-siize: cover; width: 100%; height: 100%;";
+  //     document.getElementById("${contractAddress}-${adspaceIndex}")
+  //       .prepend(image);
+  //   } catch (e) {
+  //     if (innerATags?.length) {
+  //       document.getElementById("${contractAddress}-${adspaceIndex}").removeChild(
+  //         innerATags[0]
+  //       );
+  //     }
+  //     console.warn(e);
+  //   }
+  // })();`);
+  const code = `const provider = new ethers.providers.JsonRpcProvider("${rpcUrl}", ${chainId});
   const adspaceContract = new ethers.Contract(
     "${contractAddress}",
     [
@@ -55,7 +100,7 @@ export async function generateSnippet({
       }
       console.warn(e);
     }
-  })();`);
+  })();`;
 
   return `
   <!-- Start of ad --><div id="${contractAddress}-${adspaceIndex}" style="position: relative; width: 640px; height: 480px;">

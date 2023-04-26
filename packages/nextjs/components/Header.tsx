@@ -48,6 +48,9 @@ export const Header = () => {
       <li>
         <NavLink href="/marketplace">Marketplace</NavLink>
       </li>
+      <li>
+        <NavLink href="/analytics">Analytics</NavLink>
+      </li>
     </>
   );
 
