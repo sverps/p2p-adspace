@@ -10,6 +10,7 @@ const Analytics: NextPage = () => {
     isLoading,
   } = useQuery(["GET_EVENTS"], async () => {
     const searchParams = new URLSearchParams();
+    searchParams.set('chainId', getTargetNetwork())
     const searchString = searchParams.toString();
     const response = await fetch(`/api/analytics${searchString ? `?${searchString}` : ""}`);
     if (!response.ok) {
