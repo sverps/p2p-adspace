@@ -1,16 +1,19 @@
-import { Db } from "mongodb";
-import { NextApiRequest, NextApiResponse } from "next";
-import { withMiddleware } from "~~/backend/middleware";
+import { CustomRequest, CustomResponse, withMiddleware } from "~~/backend/middleware";
+import { Event } from "~~/p2p-adspace/utils/analytics";
 
-async function handlePostAnalytics(req: NextApiRequest & { db: Db }, res: NextApiResponse) {
-  req.db.collection("events");
+async function handlePostAnalytics(req: CustomRequest) {
+  const event: Event = { chainId: 31337, ...req.body };
+  await req.db.collection("events").insertOne(event);
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handleGetAnalytics(req: CustomRequest, res: CustomResponse) {
+  const filter: Partial<Event> = req.query;
+  const events = await req.db.collection("events").find(filter).toArray();
+  res.status(200).send(events ?? []);
+}
+
+async function handler(req: CustomRequest, res: CustomResponse) {
   console.log(`[${req.method}] ${req.url}`);
-  if (!req.method || ["OPTIONS", "POST"].includes(req.method)) {
-    res.status(405).send("Method not allowed");
-  }
   if (req.method === "OPTIONS") {
     res
       .status(204)
@@ -18,8 +21,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       .setHeader("Access-Control-Allow-Methods", "POST")
       .setHeader("Access-Control-Allow-Headers", "content-type")
       .send("OK");
+  } else if (req.method === "POST") {
+    await handlePostAnalytics(req);
+    res.status(200).setHeader("Access-Control-Allow-Origin", "*").send("OK");
+  } else if (req.method === "GET") {
+    await handleGetAnalytics(req, res);
   } else {
-    await handlePostAnalytics(req, res);
+    res.status(405).send("Method not allowed");
   }
 }
 

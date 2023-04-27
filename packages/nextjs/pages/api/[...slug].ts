@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { createClient } from "redis";
-import { main } from "~~/backend/database";
 import { Event } from "~~/p2p-adspace/utils/analytics";
 
 if (!process.env.REDIS_URI) {
@@ -69,8 +68,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const responseData = await handleGetEvents(slug[1]);
       res.status(responseData ? 200 : 404).send(responseData ? responseData : "Not found");
     }
-  } else if (slug[0] === "test") {
-    res.status(200).send(await main());
   } else {
     res.status(400).send("Wrong endpoint or method");
   }

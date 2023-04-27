@@ -4,6 +4,8 @@ export enum EventType {
 }
 
 export type Event = {
+  chainId: number;
+  address: string;
   timestamp: number;
   type: EventType;
   adspaceIndex: string;

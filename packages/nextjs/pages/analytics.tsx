@@ -9,7 +9,9 @@ const Analytics: NextPage = () => {
     error,
     isLoading,
   } = useQuery(["GET_EVENTS"], async () => {
-    const response = await fetch("/api/analytics/31337-0-0");
+    const searchParams = new URLSearchParams();
+    const searchString = searchParams.toString();
+    const response = await fetch(`/api/analytics${searchString ? `?${searchString}` : ""}`);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
