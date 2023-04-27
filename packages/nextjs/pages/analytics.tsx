@@ -2,6 +2,7 @@ import Head from "next/head";
 import type { NextPage } from "next";
 import { useQuery } from "wagmi";
 import { Event } from "~~/p2p-adspace/utils/analytics";
+import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const Analytics: NextPage = () => {
   const {
@@ -10,7 +11,7 @@ const Analytics: NextPage = () => {
     isLoading,
   } = useQuery(["GET_EVENTS"], async () => {
     const searchParams = new URLSearchParams();
-    searchParams.set('chainId', getTargetNetwork())
+    searchParams.set("chainId", getTargetNetwork().id.toString());
     const searchString = searchParams.toString();
     const response = await fetch(`/api/analytics${searchString ? `?${searchString}` : ""}`);
     if (!response.ok) {
@@ -19,6 +20,7 @@ const Analytics: NextPage = () => {
     return (await response.json()) as Event[];
   });
 
+  console.log({ data });
   return (
     <>
       <Head>

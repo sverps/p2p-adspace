@@ -1,4 +1,5 @@
-import { MongoClient } from "mongodb";
+import { Db, MongoClient } from "mongodb";
+import { NextApiRequest, NextApiResponse } from "next";
 
 if (!process.env.MONGODB_URI) {
   console.error("Missing `MONGODB_URI` in `package/nextjs/.env.local`");
@@ -12,10 +13,13 @@ if (!process.env.MONGODB_NAME) {
 // Connection URL
 const client = new MongoClient(process.env.MONGODB_URI);
 
-export function withDatabase(handler: (req: any, res: any) => void) {
+export type CustomRequest = NextApiRequest & { db: Db; dbClient: MongoClient };
+export type CustomResponse = NextApiResponse;
+
+export function withDatabase(handler: (req: CustomRequest, res: CustomResponse) => Promise<void>) {
   return (req: any, res: any) => {
     req.dbClient = client;
     req.db = client.db(process.env.MONGODB_NAME);
-    handler(req, res);
+    return handler(req, res);
   };
 }
