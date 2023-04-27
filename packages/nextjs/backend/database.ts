@@ -13,10 +13,11 @@ if (!process.env.MONGODB_NAME) {
 // Connection URL
 const client = new MongoClient(process.env.MONGODB_URI);
 
-export type CustomRequest = NextApiRequest & { db: Db; dbClient: MongoClient };
-export type CustomResponse = NextApiResponse;
+export type WithDb = { db: Db; dbClient: MongoClient };
 
-export function withDatabase(handler: (req: CustomRequest, res: CustomResponse) => Promise<void>) {
+export function withDatabase<T extends NextApiRequest>(
+  handler: (req: T & WithDb, res: NextApiResponse) => Promise<void>,
+) {
   return (req: any, res: any) => {
     req.dbClient = client;
     req.db = client.db(process.env.MONGODB_NAME);

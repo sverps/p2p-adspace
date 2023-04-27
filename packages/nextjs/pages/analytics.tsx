@@ -7,8 +7,8 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
 const Analytics: NextPage = () => {
   const {
     data = [],
-    error,
-    isLoading,
+    // error,
+    // isLoading,
   } = useQuery(["GET_EVENTS"], async () => {
     const searchParams = new URLSearchParams();
     searchParams.set("chainId", getTargetNetwork().id.toString());
