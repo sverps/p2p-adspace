@@ -4,6 +4,9 @@ import { useQuery } from "wagmi";
 import { Event } from "~~/p2p-adspace/utils/analytics";
 import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
+const jwt =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyZXNzIjoiMHhFODc2ZDY5ODE3RTBhNENEMzI1RjIwRDZlQzc2MEQyRWMyZTE1ZDQ5IiwiaWF0IjoxNjgyNzE5MjA5fQ.Oz1PZ34kgd_T7FeUfQ3OO1ykA4YQfnHxD950szse-Eg";
+
 const Analytics: NextPage = () => {
   const {
     data = [],
@@ -13,14 +16,15 @@ const Analytics: NextPage = () => {
     const searchParams = new URLSearchParams();
     searchParams.set("chainId", getTargetNetwork().id.toString());
     const searchString = searchParams.toString();
-    const response = await fetch(`/api/analytics${searchString ? `?${searchString}` : ""}`);
+    const response = await fetch(`/api/analytics${searchString ? `?${searchString}` : ""}`, {
+      headers: { Authorization: `Bearer ${jwt}` },
+    });
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
     return (await response.json()) as Event[];
   });
 
-  console.log({ data });
   return (
     <>
       <Head>

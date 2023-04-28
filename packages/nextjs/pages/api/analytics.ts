@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { getAdspacesAndBids } from "~~/backend/adspace-marketplace";
 import { WithAuth, withAuth } from "~~/backend/auth";
 import { WithDb, withDatabase } from "~~/backend/database";
 import { getUserHash } from "~~/backend/utils";
@@ -14,10 +15,20 @@ async function handlePostAnalytics(req: NextApiRequest & WithDb, res: NextApiRes
 }
 
 async function handleGetAnalytics(req: NextApiRequest & WithDb & WithAuth, res: NextApiResponse) {
-  const filter: Partial<Event> = parseSchema(req.query, EventSchema);
+  const { adspaces, bids } = await getAdspacesAndBids(req.user.address);
+  const queryFilter: Partial<Event> = parseSchema(req.query, EventSchema);
+  const userFilter = (
+    bids.map(({ adspaceIndex, bidIndex }) => ({ adspaceIndex, bidIndex })) as {
+      adspaceIndex: number;
+      bidIndex?: number;
+    }[]
+  ).concat(adspaces.map(({ adspaceIndex }) => ({ adspaceIndex })));
   const events = await req.db
     .collection("events")
-    .find({ ...filter })
+    .find({
+      ...queryFilter,
+      $or: userFilter,
+    })
     .toArray();
   res.status(200).send(events ?? []);
 }

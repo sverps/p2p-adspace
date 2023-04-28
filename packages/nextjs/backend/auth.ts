@@ -12,7 +12,7 @@ export function withAuth<T extends NextApiRequest>(
   handler: (req: T & WithAuth, res: NextApiResponse) => Promise<void>,
 ) {
   return (req: any, res: any) => {
-    const authHeader = req.headers["Authorization"] as string;
+    const authHeader = req.headers["authorization"] as string;
     if (!authHeader) {
       res.status(401).end();
       return;
@@ -21,7 +21,7 @@ export function withAuth<T extends NextApiRequest>(
       const decoded = jwt.verify(authHeader.substring("Bearer ".length), process.env.JWT_SECRET!) as {
         address: string;
       };
-      res.user = { address: decoded.address };
+      req.user = { address: decoded.address };
     } catch (err) {
       console.error(err);
       res.status(500).end();
