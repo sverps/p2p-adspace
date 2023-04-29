@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { ReactNode, createContext, useCallback, useContext, useState } from "react";
 import { Address, Signer } from "@wagmi/core";
 import { SiweMessage } from "siwe";
 import { useSigner } from "wagmi";
@@ -40,18 +40,40 @@ async function signInWithEthereum(signer: Signer) {
     body: JSON.stringify({ message, signature }),
     // credentials: "include",
   });
-  console.log(await res.text());
+  const { token } = await res.json();
+  return token;
 }
 
+interface AuthContext {
+  token: string | undefined;
+  setToken: (token: string | undefined) => void;
+}
+
+const AuthContext = createContext<AuthContext>({
+  token: undefined,
+  setToken: () => undefined,
+});
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [token, setToken] = useState<string>();
+  return <AuthContext.Provider value={{ token, setToken }}>{children}</AuthContext.Provider>;
+};
+
 export function useAuth() {
+  const { token, setToken } = useContext(AuthContext);
   const { data: signer } = useSigner();
-  useEffect(() => {
-    if (signer) {
-      signInWithEthereum(signer);
+
+  const handleSignIn = useCallback(async () => {
+    if (!signer) {
+      return;
     }
-  }, [signer]);
+    const token = await signInWithEthereum(signer);
+    setToken(token);
+  }, [setToken, signer]);
+
   return {
-    loading: true,
-    isAuth: false,
+    onSignIn: handleSignIn,
+    onSignOut: () => setToken(undefined),
+    token,
   };
 }

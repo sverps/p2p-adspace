@@ -23,13 +23,15 @@ async function handleGetAnalytics(req: NextApiRequest & WithDb & WithAuth, res: 
       bidIndex?: number;
     }[]
   ).concat(adspaces.map(({ adspaceIndex }) => ({ adspaceIndex })));
-  const events = await req.db
-    .collection("events")
-    .find({
-      ...queryFilter,
-      $or: userFilter,
-    })
-    .toArray();
+  const events = userFilter.length
+    ? await req.db
+        .collection("events")
+        .find({
+          ...queryFilter,
+          $or: userFilter,
+        })
+        .toArray()
+    : [];
   res.status(200).send(events ?? []);
 }
 

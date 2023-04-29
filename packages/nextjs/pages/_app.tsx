@@ -9,6 +9,7 @@ import { Footer } from "~~/components/Footer";
 import { Header } from "~~/components/Header";
 import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { useEthPrice } from "~~/hooks/scaffold-eth";
+import { AuthProvider } from "~~/p2p-adspace/hooks/auth";
 import { useAppStore } from "~~/services/store/store";
 import { wagmiClient } from "~~/services/web3/wagmiClient";
 import { appChains } from "~~/services/web3/wagmiConnectors";
@@ -25,19 +26,21 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   }, [setEthPrice, price]);
 
   return (
-    <WagmiConfig client={wagmiClient}>
-      <NextNProgress />
-      <RainbowKitProvider chains={appChains.chains} avatar={BlockieAvatar}>
-        <div className="flex flex-col min-h-screen">
-          <Header />
-          <main className="relative flex flex-col flex-1">
-            <Component {...pageProps} />
-          </main>
-          <Footer />
-        </div>
-        <Toaster />
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <AuthProvider>
+      <WagmiConfig client={wagmiClient}>
+        <NextNProgress />
+        <RainbowKitProvider chains={appChains.chains} avatar={BlockieAvatar}>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="relative flex flex-col flex-1">
+              <Component {...pageProps} />
+            </main>
+            <Footer />
+          </div>
+          <Toaster />
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </AuthProvider>
   );
 };
 
