@@ -17,14 +17,15 @@ const Home: NextPage = () => {
         <div className="px-5">
           <h1 className="text-center mb-8">
             <span className="block text-2xl mb-2">Welcome to</span>
-            <span
+            <a
+              href="#"
+              target="_blank"
               className="block text-4xl font-bold"
-              onClick={() => {
-                fetch("/api/analytics/31337-0-0");
-              }}
+              onClick={event => console.log({ onClick: event })}
+              onAuxClick={event => console.log({ onAuxClick: event })}
             >
               Adspace marketplace
-            </span>
+            </a>
             {getTargetNetwork().id === 31337 && (
               <AdDisplay adIndex={0} chainId={31337} rpcUrl="http://localhost:8545" />
             )}

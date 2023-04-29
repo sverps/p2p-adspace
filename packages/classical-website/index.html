@@ -63,11 +63,10 @@
                   address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
                   type: 1,
                   adspaceIndex: 0,
-                  bidIndex: 0,
+                  bidIndex: bidIndex.toNumber(),
                 }),
               })
             };
-            image.on
             image.href = addProtocolIfMissing(adDestinationUrl);
             image.target = "_blank";
             image.rel = "noreferrer";
