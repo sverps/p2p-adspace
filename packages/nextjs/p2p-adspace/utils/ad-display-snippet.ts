@@ -5,11 +5,13 @@ export async function generateSnippet({
   chainId = 31337,
   contractAddress,
   adspaceIndex,
+  minified = true,
 }: {
   rpcUrl: string;
   contractAddress: string;
   chainId: number;
   adspaceIndex: number;
+  minified?: boolean;
 }) {
   const code = `const provider = new ethers.providers.JsonRpcProvider("${rpcUrl}", ${chainId});
   const adspaceContract = new ethers.Contract(
@@ -57,6 +59,16 @@ export async function generateSnippet({
       const image = document.createElement("a");
       image.onclick = () => sendEvent(bidIndex, 1);
       image.onauxclick = (event) => {};
+      let intersectionEventSent = false;
+      const observer = new IntersectionObserver(([viewport]) => {
+        if (!intersectionEventSent && viewport.isIntersecting) {
+          sendEvent(bidIndex, 0)
+          intersectionEventSent = true;
+        }
+      }, {
+        threshold: 1.0,
+      });
+      observer.observe(image);
       image.href = addProtocolIfMissing(adDestinationUrl);
       image.target = "_blank";
       image.rel = "noreferrer";
@@ -86,7 +98,7 @@ export async function generateSnippet({
       </svg>
     </div>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
-    <script>${(await minify(code)).code}</script>
+    <script>${minified ? (await minify(code)).code : code}</script>
   </div>
   <!-- End of ad -->
   `;
