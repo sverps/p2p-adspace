@@ -11,6 +11,7 @@
 
 
 
+
     <!-- Start of ad -->
     <div id="0x5FbDB2315678afecb367f032d93F642f64180aa3-0" style="position: relative; width: 640px; height: 480px;">
       <div
@@ -23,68 +24,10 @@
         </svg>
       </div>
       <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
-      <script>const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545", 31337);
-        const adspaceContract = new ethers.Contract(
-          "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-          [
-            "function bids(uint256 adspaceIndex, uint256 bidIndex) public view returns (address bidder, uint256 bid, string ipfsAdCreative, string adDestinationUrl, uint256 adDuration)",
-            "function acceptedBids(uint256 adspaceIndex) public view returns (uint256, uint256, uint256)",
-          ],
-          provider,
-        );
-        function addProtocolIfMissing(url) {
-          if (url.includes("://")) {
-            return url;
-          }
-          return "https://" + url;
-        }
-        (async function () {
-          const innerATags = document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").getElementsByTagName('a');
-          try {
-            const [, bidIndex, adEndTimestamp] = (await adspaceContract.acceptedBids(ethers.BigNumber.from(0))) ?? [];
-            if (adEndTimestamp.toNumber() * 1000 <= new Date().getTime()) {
-              if (innerATags?.length) {
-                document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").removeChild(
-                  innerATags[0]
-                );
-              }
-              return;
-            }
-            const [, , ipfsAdCreative, adDestinationUrl] = (await adspaceContract.bids(0, bidIndex)) ?? [];
-            const image = document.createElement("a");
-            image.onclick = () => {
-              fetch('http://localhost:3000/api/analytics', {
-                method: 'POST',
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  chainId: 31337,
-                  address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-                  type: 1,
-                  adspaceIndex: 0,
-                  bidIndex: bidIndex.toNumber(),
-                }),
-              })
-            };
-            image.href = addProtocolIfMissing(adDestinationUrl);
-            image.target = "_blank";
-            image.rel = "noreferrer";
-            image.style = "position: absolute; background-image: url(https://ipfs.io/ipfs/" + ipfsAdCreative + ");" +
-              "background-repeat: no-repeat; background-position: center; background-siize: cover; width: 100%; height: 100%;";
-            document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0")
-              .prepend(image);
-          } catch (e) {
-            if (innerATags?.length) {
-              document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").removeChild(
-                innerATags[0]
-              );
-            }
-            console.warn(e);
-          }
-        })();</script>
+      <script>const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545", 31337), adspaceContract = new ethers.Contract("0x5FbDB2315678afecb367f032d93F642f64180aa3", ["function bids(uint256 adspaceIndex, uint256 bidIndex) public view returns (address bidder, uint256 bid, string ipfsAdCreative, string adDestinationUrl, uint256 adDuration)", "function acceptedBids(uint256 adspaceIndex) public view returns (uint256, uint256, uint256)"], provider); function addProtocolIfMissing(e) { return e.includes("://") ? e : "https://" + e } function sendEvent(e, t) { fetch("http://localhost:3000/api/analytics", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ chainId: 31337, address: "0x5FbDB2315678afecb367f032d93F642f64180aa3", type: t, adspaceIndex: 0, bidIndex: e.toNumber() }) }) } !async function () { const e = document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").getElementsByTagName("a"); try { const [, t, n] = await adspaceContract.acceptedBids(ethers.BigNumber.from(0)) ?? []; if (1e3 * n.toNumber() <= (new Date).getTime()) return void (e?.length && document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").removeChild(e[0])); const [, , a, i] = await adspaceContract.bids(0, t) ?? [], d = document.createElement("a"); d.onclick = () => sendEvent(t, 1), d.onauxclick = e => { }, d.href = addProtocolIfMissing(i), d.target = "_blank", d.rel = "noreferrer", d.style = "position: absolute; background-image: url(https://ipfs.io/ipfs/" + a + ");background-repeat: no-repeat; background-position: center; background-siize: cover; width: 100%; height: 100%;", document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").prepend(d) } catch (t) { e?.length && document.getElementById("0x5FbDB2315678afecb367f032d93F642f64180aa3-0").removeChild(e[0]), console.warn(t) } }();</script>
     </div>
     <!-- End of ad -->
+
 
 
   </div>

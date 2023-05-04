@@ -1,6 +1,7 @@
 import Head from "next/head";
 import type { NextPage } from "next";
 import { useQuery } from "wagmi";
+import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
 import { Page } from "~~/p2p-adspace/components/Page";
 import { useAuth } from "~~/p2p-adspace/hooks/auth";
 import { Event } from "~~/p2p-adspace/utils/analytics";
@@ -8,6 +9,7 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
 
 const Analytics: NextPage = () => {
   const { token, onSignIn } = useAuth();
+  const { data: deployedContract } = useDeployedContractInfo("AdspaceMarketplace");
   const {
     data = [],
     // error,
@@ -17,6 +19,7 @@ const Analytics: NextPage = () => {
     async () => {
       const searchParams = new URLSearchParams();
       searchParams.set("chainId", getTargetNetwork().id.toString());
+      searchParams.set("contractAddress", deployedContract!.address);
       const searchString = searchParams.toString();
       const response = await fetch(`/api/analytics${searchString ? `?${searchString}` : ""}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -26,7 +29,7 @@ const Analytics: NextPage = () => {
       }
       return (await response.json()) as Event[];
     },
-    { enabled: !!token },
+    { enabled: !!token && !!deployedContract },
   );
 
   return (

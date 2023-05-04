@@ -86,7 +86,7 @@ export async function generateSnippet({
       </svg>
     </div>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
-    <script>${await minify(code)}</script>
+    <script>${(await minify(code)).code}</script>
   </div>
   <!-- End of ad -->
   `;

@@ -3,7 +3,7 @@ export function parseSchema(
   shape: Record<string, (valueIn: string) => any>,
 ) {
   return Object.entries(query).reduce((result, [key, value]) => {
-    if (shape[key] && value) {
+    if (shape[key] && value !== undefined) {
       return { ...result, [key]: Array.isArray(value) ? value.map(v => shape[key](v)) : shape[key](value) };
     }
     return result;
@@ -12,7 +12,7 @@ export function parseSchema(
 
 export const EventSchema = {
   chainId: Number,
-  address: Number,
+  address: String,
   type: Number,
   adspaceIndex: Number,
   bidIndex: Number,

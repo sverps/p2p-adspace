@@ -1,4 +1,5 @@
-import { ReactNode, createContext, useCallback, useContext, useState } from "react";
+import { ReactNode, createContext, useCallback, useContext } from "react";
+import useLocalStorage from "./useLocalStorage";
 import { Address, Signer } from "@wagmi/core";
 import { SiweMessage } from "siwe";
 import { useSigner } from "wagmi";
@@ -55,7 +56,7 @@ const AuthContext = createContext<AuthContext>({
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string>();
+  const [token, setToken] = useLocalStorage<string | undefined>("auth_token", undefined);
   return <AuthContext.Provider value={{ token, setToken }}>{children}</AuthContext.Provider>;
 };
 
